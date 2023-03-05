@@ -123,7 +123,7 @@
 \end{itemize}
 \section{绑定FarmerId}
 \begin{flushleft}
-    在挖矿开始前，你需要把你的BHD接收奖励的地址和FarmerId绑定，因为需要做签名，所以你需要先编写正确的配置文件并将你正确的``Seed''和BHD奖励地址填入。使用下方的命令来绑定FarmerId。
+    在挖矿开始前，你需要把你的BHD接收奖励的地址和FarmerId绑定，因为需要做签名，所以你需要先编写正确的配置文件并将你正确的``Seed''和BHD奖励地址填入，然后使用下方的命令来进行绑定。
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
@@ -133,6 +133,25 @@
 \begin{itemize}
     \item ``bind''为主命令
 \end{itemize}
+\section{查询绑定}
+\begin{flushleft}
+    当绑定完成后，可以通过``\mintinline{bash}{bind --check}''来查询绑定记录。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+    btchd-miner bind --check
+
+  --> txid: b6037724221c1a21b183596f25cfcf46da90ce87c67f4fb93d74dce5dd977463
+    height: 200003
+   address: 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ
+    farmer: a7ecb9581e69e4ce968e5465764f29f519901d9bc892da89e3048b87ba820c8b04e17d726bfbb236e3f0e33f8a83851e
+     valid: yes
+    active: yes
+\end{minted}
+\normalsize
+\begin{flushleft}
+    查询出来的绑定交易信息包括：交易哈希``txid''，高度``height''，绑定出块地址``address''及chia的``farmer''公钥。另外还包括有效性标志``valid''，是否激活``active''。
+\end{flushleft}
 \section{质押BHD}
 \begin{flushleft}
     将BHD质押到网络上，以获取区块的完整收益，使用下面的命令来进行质押。
@@ -173,16 +192,16 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-btchd-miner.exe deposit --check --valid
+    btchd-miner.exe deposit --check --valid
 
-200711 [ retarget ] 093d4b78b49fa30be40e9156b237184570b93a5003b15534bf39a50a001f6bbb -->
-                    2Mu5hQRdDKNWYYMKNBDAMDFimjop3B5zwYM       123 BHD [ noterm ]
-200392 [ retarget ] 87e3b2ab348340708a2fa4c175e56a86b4986eedf71ef486943737c02c1cd271 -->
-                    2Mu5hQRdDKNWYYMKNBDAMDFimjop3B5zwYM       500 BHD [ noterm ]
-200375 [   point  ] 9b55c36accd6728b62be283e23c8fa3560ae1ac0a7828682f53e26d7de6b326b -->
-                    2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ     10000 BHD [  term1 ]
-200326 [ retarget ] b88888a693c61a426b08d4121dff40ed24154d014419a9b0cccbddd03d795ea9 -->
-                    2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ     50000 BHD [ noterm ]
+    200711 [ retarget ] 093d4b78b49fa30be40e9156b237184570b93a5003b15534bf39a50a001f6bbb -->
+                        2Mu5hQRdDKNWYYMKNBDAMDFimjop3B5zwYM       123 BHD [ noterm ]
+    200392 [ retarget ] 87e3b2ab348340708a2fa4c175e56a86b4986eedf71ef486943737c02c1cd271 -->
+                        2Mu5hQRdDKNWYYMKNBDAMDFimjop3B5zwYM       500 BHD [ noterm ]
+    200375 [   point  ] 9b55c36accd6728b62be283e23c8fa3560ae1ac0a7828682f53e26d7de6b326b -->
+                        2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ     10000 BHD [  term1 ]
+    200326 [ retarget ] b88888a693c61a426b08d4121dff40ed24154d014419a9b0cccbddd03d795ea9 -->
+                        2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ     50000 BHD [ noterm ]
 \end{minted}
 \normalsize
 \begin{flushleft}
