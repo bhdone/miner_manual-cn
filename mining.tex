@@ -92,8 +92,8 @@
 \begin{itemize}
     \item ``-testnet''参数，启动测试网络的节点程序，若不带该参数则表示启动正式网络的节点程序
     \item ``-server''参数，启动RPC服务器，用以接收其它客户端，包括挖矿客户端的连接和命令
-    \item ``--timelord''参数，启动时间证明
-    \item ``--timelord-vdf\_client''参数，当指明了``--timelord''参数时，需要同时添加本参数来指定``vdf\_client''的路径
+    \item ``-timelord''参数，启动时间证明
+    \item ``-timelord-vdf\_client''参数，当指明了``-timelord''参数时，需要同时添加本参数来指定``vdf\_client''的路径
 \end{itemize}
 \begin{flushleft}
     注：与timelord相关的参数只能在Linux下运行，同时你需要编译chiavdf项目。``timelord''相关的参数，用于在本地计算并获取时间证明。关于时间证明的相关信息，可以参考BHD新版本的白皮书中与VDF相关的章节。另外，因为VDF计算暂时还没有Windows版本，若要运行VDF则需要使用Linux操作系统。因为每次出块，都需要获取与当前PoS相关的一个时间证明，所以，若在本地运行VDF则可以确保自己以在第一时间收到正确的证明答案。若没有在本地运行时间证明，那么需要通过网络将证明请求发送至可以计算证明的节点，在节点获得答案后会将其发回到本地。我们鼓励节点在本地运行时间证明，这样对于矿工本身和整个网络来说都是有益的。
@@ -103,7 +103,7 @@
 \end{flushleft}
 \subsubsection{命令列表}
 \begin{flushleft}
-    在执行挖矿程序时，使用参数``--help''将显示出帮助文档。下方是一些重要的命令：
+    在执行挖矿程序时，使用参数``\mintinline{bash}{--help}''将显示出帮助文档。下方是一些重要的命令：
 \end{flushleft}
 \begin{itemize}
     \item ``mining''开始挖矿
@@ -122,8 +122,8 @@
 \normalsize
 \begin{itemize}
     \item ``bind''为主命令
-    \item ``--test''参数，使用测试网络，若没有该参数则命令在主网上执行
-    \item ``--no-proxy''参数，跳过本地的proxy设置，直接连接到节点
+    \item ``\mintinline{bash}{--test}''参数，使用测试网络，若没有该参数则命令在主网上执行
+    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
 \section{质押BHD}
 \begin{flushleft}
@@ -131,32 +131,52 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe deposit --amount [质押数量] --term [noterm, term1, term2, term3] --testnet --no-proxy
+    btchd-miner.exe deposit --amount 质押数量 --term [noterm, term1, term2, term3] --testnet --no-proxy
 \end{minted}
 \normalsize
 \begin{itemize}
     \item 其中``deposit''为主命令
-    \item ``--amount''参数，用于指定总共质押的货币数量
-    \item ``--term''参数，用于指定锁定的期限。其中：``noterm''为活期， ``term1'', ``term2'', ``term3''分别为不同的锁定期限类型
-    \item ``--testnet''参数，使用测试网络，若没有该参数则命令在主网上执行
-    \item ``--no-proxy''参数，跳过本地的proxy设置，直接连接到节点
+    \item ``\mintinline{bash}{--amount}''参数，用于指定总共质押的货币数量
+    \item ``\mintinline{bash}{--term}''参数，用于指定锁定的期限。其中：``noterm''为活期， ``term1'', ``term2'', ``term3''分别为不同的锁定期限类型
+    \item ``\mintinline{bash}{--testnet}''参数，使用测试网络，若没有该参数则命令在主网上执行
+    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
 \begin{flushleft}
-    在质押成功后，``btchd-miner.exe''会显示出一个哈希值，这个哈希值是本次交易的``交易id''，请保存下来，未来需要退出质押的时候使用。
+    在质押成功后，``btchd-miner.exe''会显示出一个哈希值，这个哈希值是本次交易的``交易哈希''，请保存下来，未来需要退出质押或者重新绑定质押地址的时候使用。
 \end{flushleft}
-\section{退出质押}
+\section{重新绑定}
 \begin{flushleft}
-    当质押的金额的锁定期限到达后，矿工们可以将质押的金额取出。使用下方的命令来取出。
+    质押在链上的BHD将无法在约定的时间内被全额取出，但是可以将其转移绑定给其它的矿工。
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe withdraw --txid [交易id] --testnet --no-proxy
+    btchd-miner.exe retarget --txid 交易哈希 --revoke-txid 上一次重绑交易哈希 --address 地址 --testnet --no-proxy
+\end{minted}
+\normalsize
+\begin{itemize}
+    \item 其中``retarget''为主命令
+    \item ``\mintinline{bash}{--txid}''参数，用于指定将要被重新绑定的质押交易哈希
+    \item ``\mintinline{bash}{--revoke-txid}''参数，用于指定上一次重新绑定的哈希，若是第一次进行重绑，则该参数可以省略
+    \item ``\mintinline{bash}{--address}''参数，用于指定新的被绑定的地址
+    \item ``\mintinline{bash}{--testnet}''参数，使用测试网络，若没有该参数则命令在主网上执行
+    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
+\end{itemize}
+\begin{flushleft}
+    为了防止在短时间内某笔质押被频繁重绑，绑定操作有时间间隔规定。该次绑定与质押或上次绑定之间的区块数量不得小于一个既定值。在testnet3测试网上，该数值为10，在正式网络上为7个星期左右。一笔已经重新绑定过的质押可以被再次重绑，命令格式与上方描述相同，需要指定上一次重绑的交易哈希。
+\end{flushleft}
+\section{退出质押}
+\begin{flushleft}
+    当质押的金额的锁定期限到达后，矿工们可以将质押的金额取出。使用下方的命令。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+    btchd-miner.exe withdraw --txid 交易哈希 --testnet --no-proxy
 \end{minted}
 \normalsize
 \begin{itemize}
     \item 其中``withdraw''为主命令
-    \item ``--txid''参数，指定``交易id''，这个``交易id''在之前使用``deposit''命令成功后会被显示出来。
-    \item ``--no-proxy''参数，跳过本地的proxy设置，直接连接到节点
+    \item ``\mintinline{bash}{--txid}''参数，指定``交易哈希''，这个``交易哈希''在之前使用``deposit''命令成功后会被显示出来。
+    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
 \section{启动挖矿}
 \subsection{启动节点程序}
@@ -169,9 +189,9 @@
 \end{minted}
 \normalsize
 \begin{itemize}
-    \item ``-testnet''参数，表示启动测试网络的节点程序，若没有该参数则启动正式网络的节点程序
-    \item ``-server''参数，打开RPC服务器，用于稍后与挖矿程序进行通信
-    \item ``--no-proxy''参数，跳过本地的proxy设置，直接连接到节点
+    \item ``\mintinline{bash}{-testnet}''参数，表示启动测试网络的节点程序，若没有该参数则启动正式网络的节点程序
+    \item ``\mintinline{bash}{-server}''参数，打开RPC服务器，用于稍后与挖矿程序进行通信
+    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
 \subsection{启动挖矿程序}
 \begin{flushleft}
@@ -184,6 +204,6 @@
 \normalsize
 \begin{itemize}
     \item ``mining''为主命令
-    \item ``--testnet''参数，使用测试网络，若没有该参数，则命令在主网上执行
-    \item ``--no-proxy''参数，跳过本地的proxy设置，直接连接到节点
+    \item ``\mintinline{bash}{--testnet}''参数，使用测试网络，若没有该参数，则命令在主网上执行
+    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
