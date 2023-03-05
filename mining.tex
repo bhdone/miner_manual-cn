@@ -58,6 +58,8 @@
 \scriptsize
 \begin{minted}{json}
 {
+    "testnet": true,
+    "noproxy": true,
     "reward": "38CLnjuj31ifZMXZV8UhbyCo3fNP46Lszy",
     "seed": "bird convince trend skin lumber escape crater describe ...",
     "plotPath": [
@@ -70,19 +72,27 @@
 }
 \end{minted}
 \normalsize
-\subsubsection{BHD奖励地址}
+\subsubsection{测试网络``testnet''}
+\begin{flushleft}
+    当其值为true时，使用测试网络，否则使用正式网络。
+\end{flushleft}
+\subsubsection{不使用网络代理``noproxy''}
+\begin{flushleft}
+    该值为true时，表示不使用网络代理来连接钱包，若无特殊的代理需求，请保持该选项值为true。
+\end{flushleft}
+\subsubsection{BHD奖励地址``reward''}
 \begin{flushleft}
     这是你在BHD网络中的接收挖矿奖励的地址。注意，在你使用这个地址前，需要确保已经将其与你的Chia的P盘文件相关的Farmer公钥相绑定，要了解如何进行绑定操作，请查阅``绑定FarmerId''一节。
 \end{flushleft}
-\subsubsection{Chia钱包seed}
+\subsubsection{Chia钱包助词词``seed''}
 \begin{flushleft}
     你在初始化硬盘空间的时候，Chia会需要你提供一个私钥，这个私钥由这个叫做``Seed''的字符串组成，里面是一些单词的组合。我们在产生BHD的区块时，需要用到这个私钥来对区块进行签名，用以验证你的身份。请将该``Seed''粘贴到这时。该私钥只用于签名，并且只保存在本地，不会被上传到BHD的链上或者网络中。
 \end{flushleft}
-\subsubsection{Plot文件目录}
+\subsubsection{Plot文件目录``plotPath''}
 \begin{flushleft}
     在这里你需要指定你的Plot文件目录，该登记项是一个数组，你可以同时登记多个Plot文件目录。
 \end{flushleft}
-\subsubsection{本地钱包的RPC连接}
+\subsubsection{本地钱包的RPC连接``rpc''}
 \begin{flushleft}
     与本地钱包的RPC连接，如果你使用登录用户名称和密码，可以在这里指定。默认的我们使用``.cookie''文件来完成与钱包的通讯认证，所以在这里只需要登记``host''项即可。
 \end{flushleft}
@@ -99,7 +109,7 @@
     注：与timelord相关的参数只能在Linux下运行，同时你需要编译chiavdf项目。``timelord''相关的参数，用于在本地计算并获取时间证明。关于时间证明的相关信息，可以参考BHD新版本的白皮书中与VDF相关的章节。另外，因为VDF计算暂时还没有Windows版本，若要运行VDF则需要使用Linux操作系统。因为每次出块，都需要获取与当前PoS相关的一个时间证明，所以，若在本地运行VDF则可以确保自己以在第一时间收到正确的证明答案。若没有在本地运行时间证明，那么需要通过网络将证明请求发送至可以计算证明的节点，在节点获得答案后会将其发回到本地。我们鼓励节点在本地运行时间证明，这样对于矿工本身和整个网络来说都是有益的。
 \end{flushleft}\subsection{挖矿程序``btchd-miner.exe''}
 \begin{flushleft}
-    挖矿程序的参数由``主命令''和``命令参数''两部分组成。``主命令''指明当前要做的工作类型，``命令参数''将补全当前操作相关的参数。值得注意的是，指明``--no-proxy''参数用于跳过任何的本地网络代理设置，正常情况下建议都带上该参数，以避免可能出现的通讯问题。
+    挖矿程序的参数由``主命令''和``命令参数''两部分组成。``主命令''指明当前要做的工作类型，``命令参数''将补全当前操作相关的参数。
 \end{flushleft}
 \subsubsection{命令列表}
 \begin{flushleft}
@@ -117,13 +127,11 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe bind --testnet --no-proxy
+    btchd-miner.exe bind
 \end{minted}
 \normalsize
 \begin{itemize}
     \item ``bind''为主命令
-    \item ``\mintinline{bash}{--test}''参数，使用测试网络，若没有该参数则命令在主网上执行
-    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
 \section{质押BHD}
 \begin{flushleft}
@@ -131,15 +139,13 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe deposit --amount 质押数量 --term [noterm, term1, term2, term3] --testnet --no-proxy
+    btchd-miner.exe deposit --amount 质押数量 --term [noterm, term1, term2, term3]
 \end{minted}
 \normalsize
 \begin{itemize}
     \item 其中``deposit''为主命令
     \item ``\mintinline{bash}{--amount}''参数，用于指定总共质押的货币数量
     \item ``\mintinline{bash}{--term}''参数，用于指定锁定的期限。其中：``noterm''为活期， ``term1'', ``term2'', ``term3''分别为不同的锁定期限类型
-    \item ``\mintinline{bash}{--testnet}''参数，使用测试网络，若没有该参数则命令在主网上执行
-    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
 \begin{flushleft}
     在质押成功后，``btchd-miner.exe''会显示出一个哈希值，这个哈希值是本次交易的``交易哈希''，请保存下来，未来需要退出质押或者重新绑定质押地址的时候使用。
@@ -150,57 +156,57 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe retarget --txid 交易哈希 --address 地址 --testnet --no-proxy
+    btchd-miner.exe retarget --txid 交易哈希 --address 地址
 \end{minted}
 \normalsize
 \begin{itemize}
     \item 其中``retarget''为主命令
     \item ``\mintinline{bash}{--txid}''参数，用于指定将要被重新绑定的质押交易哈希
     \item ``\mintinline{bash}{--address}''参数，用于指定新的被绑定的地址
-    \item ``\mintinline{bash}{--testnet}''参数，使用测试网络，若没有该参数则命令在主网上执行
-    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
 \begin{flushleft}
     为了防止在短时间内某笔质押被频繁重绑，绑定操作有时间间隔规定。该次绑定与质押或上次绑定之间的区块数量不得小于一个既定值。在testnet3测试网上，该数值为10，在正式网络上为7个星期左右。一笔已经重新绑定过的质押可以被再次重绑，命令格式与上方描述相同，需要指定上一次重绑的交易哈希。另外，只有该质押的拥有者才可以转移该质押。
 \end{flushleft}
 \section{查询质押}
 \begin{flushleft}
-    你可以通过使用``\mintinline{bash}{btchd-cli}''命令来查询与当前账号相关的质押，通过这个命令你可以了解到相关的txid并将其用在质押命令上。在命令行中显示的内容是一个json的文本，如下方的示例显示，可以看到质押的交易哈希，金额，区块高度，类型等信息。
+    你可以通过使用``\mintinline{bash}{deposit --check}''命令来查询与当前账号相关的质押，通过这个命令你可以了解到相关的txid并将其用在质押命令上。在命令行中显示的内容是一个json的文本，如下方的示例显示，可以看到质押的交易哈希，金额，区块高度，类型等信息。
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-btchd-cli.exe -testnet listpledges
-[
-{
-    "txid": "d88dc9991696fa95e088f13ccbec5970975a26e1f2434c3c7d0e78508c42d4f5",
-    "amount": 50000.00000000,
-    "from": "2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ",
-    "to": "2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ",
-    "category": "self",
-    "payloadType": 24,
-    "payloadTypeStr": "DATACARRIER_TYPE_CHIA_POINT_TERM_3",
-    "blockhash": "10476179ce364d40b4f7e7e34ad42a36f33c16815653693bc7709b7d2f4496dc",
-    "blocktime": 1675404017,
-    "blockheight": 200175,
-    "valid": true,
-    "chia": true
-}
-]
+btchd-miner.exe deposit --check --valid
+
+200711 [ retarget ] 093d4b78b49fa30be40e9156b237184570b93a5003b15534bf39a50a001f6bbb -->
+                    2Mu5hQRdDKNWYYMKNBDAMDFimjop3B5zwYM       123 BHD [ noterm ]
+200392 [ retarget ] 87e3b2ab348340708a2fa4c175e56a86b4986eedf71ef486943737c02c1cd271 -->
+                    2Mu5hQRdDKNWYYMKNBDAMDFimjop3B5zwYM       500 BHD [ noterm ]
+200375 [   point  ] 9b55c36accd6728b62be283e23c8fa3560ae1ac0a7828682f53e26d7de6b326b -->
+                    2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ     10000 BHD [  term1 ]
+200326 [ retarget ] b88888a693c61a426b08d4121dff40ed24154d014419a9b0cccbddd03d795ea9 -->
+                    2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ     50000 BHD [ noterm ]
 \end{minted}
 \normalsize
+\begin{flushleft}
+    以上是一台测试机上的查询结果，一共查询出四条有效的质押记录，项目分别为
+\end{flushleft}
+\begin{itemize}
+    \item 区块高度，这条质押交易被打包在哪个区块里
+    \item 质押类型，point表示为未被转移的质押，retarget表示质押曾经被转移一次或多次
+    \item 交易哈希，可以复制该哈希值用于质押转移
+    \item 矿工地址，享有该质押的出块地址
+    \item 质押金额及类型，这笔质押总共的质押量及质押的锁定类型，分别为：noterm-无，term1-锁定类型1，term2-锁定类型2，term3-锁定类型3
+\end{itemize}
 \section{退出质押}
 \begin{flushleft}
     当质押的金额的锁定期限到达后，矿工们可以将质押的金额取出。使用下方的命令。
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe withdraw --txid 交易哈希 --testnet --no-proxy
+    btchd-miner.exe withdraw --txid 交易哈希
 \end{minted}
 \normalsize
 \begin{itemize}
     \item 其中``withdraw''为主命令
     \item ``\mintinline{bash}{--txid}''参数，指定``交易哈希''，这个``交易哈希''在之前使用``deposit''命令成功后会被显示出来。
-    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
 \section{启动挖矿}
 \subsection{启动节点程序}
@@ -215,7 +221,6 @@ btchd-cli.exe -testnet listpledges
 \begin{itemize}
     \item ``\mintinline{bash}{-testnet}''参数，表示启动测试网络的节点程序，若没有该参数则启动正式网络的节点程序
     \item ``\mintinline{bash}{-server}''参数，打开RPC服务器，用于稍后与挖矿程序进行通信
-    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
 \subsection{启动挖矿程序}
 \begin{flushleft}
@@ -223,11 +228,9 @@ btchd-cli.exe -testnet listpledges
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe mining --testnet --no-proxy
+    btchd-miner.exe mining
 \end{minted}
 \normalsize
 \begin{itemize}
     \item ``mining''为主命令
-    \item ``\mintinline{bash}{--testnet}''参数，使用测试网络，若没有该参数，则命令在主网上执行
-    \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
