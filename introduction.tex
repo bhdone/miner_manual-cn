@@ -1,0 +1,42 @@
+\chapter{简介}
+\begin{flushleft}
+    BitcoinHD是一款使用空间证明(Proof of Capacity)共识协议的点对点数字加密货币，在比特币的基础上使用了Burst的空间证明及Chia的时空证明机制。
+\end{flushleft}
+\section{共识协议升级}
+\begin{flushleft}
+    BitcoinHD将会在既定时间（高度）将共识协议的核心算法由Burst切换至Chia。届时，将使用Chia的Plot文件进行挖矿，原burst共识协议只在校验旧区块时使用，其Plot文件将无法被用于产生新的区块。
+\end{flushleft}
+\section{技术细节}
+\begin{tabular}{ |p{2cm}|p{7cm}|l| }
+    \hline
+    \rowcolor{lightgray} 项目 & 正式网络 & 测试网络 \\[5pt]
+    \hline
+    \rowcolor{lightgray!30} \textbf{分叉高度} & 待定 & height=200,000 \\[5pt]
+    \textbf{节点版本} & 2.x & 同主网 \\[5pt]
+    \rowcolor{lightgray!30} \textbf{共识协议} & 变更为Chia & 同主网 \\[5pt]
+    \textbf{质押变更} & 1. 质押锁定增加期限 2. 期限影响锁定金额 3. 与总发行货币量相关 & 同主网 \\[5pt]
+    \rowcolor{lightgray!30} \textbf{货币总量} & 增发至 63,000,000 枚 & 同主网 \\[5pt]
+    \hline
+\end{tabular}
+\section{质押}
+\begin{flushleft}
+    原挖矿也需要质押以获得完整的区块奖励，新的版本会在原来的基础上，增加``质押类型''，并且需要质押的量与当前已经发行的货币总量相关。
+\end{flushleft}
+\subsection{质押类型}
+\begin{flushleft}
+    质押将会把货币锁定到链上一段时间，当时间到来的时候才可以取出。我们按照质押锁定时间来进行分类，不同的锁定时间，其质押的BHD所对应的实际额度也不同。例如：我们将$10_{BHD}$质押到网络上，质押类型选择``类型2''，这笔$10_{BHD}$在主网上将被锁定两年，实际相当于用户质押了$5_{BHD}$到链上。对于质押类型和相关的额度请参考下表：
+\end{flushleft}
+\begin{tabular}{ |p{3cm}|p{3cm}|p{3cm}|r| }
+    \hline
+    \rowcolor{lightgray} 类型 & 锁定(主网) & 锁定(测试网) & 比例 \\[5pt]
+    \hline
+    活期 & 1星期 & 1天 & $8\%$ \\[5pt]
+    \rowcolor{lightgray!30} 类型1 & 1年 & 3天 & $20\%$ \\[5pt]
+    类型2 & 2年 & 6天 & $50\%$ \\[5pt]
+    \rowcolor{lightgray!30} 类型3 & 3年 & 9天 & $100\%$ \\[5pt]
+    \hline
+\end{tabular}
+\section{货币发行}
+\begin{flushleft}
+    货币总量将改成$63,000,000_{BHD}$枚。硬分叉后，每个区块的产出为原发行量的三倍。基金会将不再从新区块获得奖励，但会在第一个分叉区块中一次性获得数量为所有已经发行的货币总量乘以2的奖励，该奖励用于未来开发及社区运营。
+\end{flushleft}

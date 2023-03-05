@@ -1,0 +1,133 @@
+\chapter{挖矿指南}
+\section{初始化空间（P盘）}
+\begin{flushleft}
+    初始化空间，俗称P盘。请参考Chia官方的网站上与P盘相关的信息。请注意，使用Chia的钱包生成的与私钥相关的Seed，在稍后需要复制到配置文件中，用来对区块进行签名。
+\end{flushleft}
+\section{下载节点程序}
+\begin{flushleft}
+    请访问BHD的官方网站（https://bhd.one）下载最新版本的BHD钱包，安装完成后，运行钱包程序则可以开始同步区块数据。
+\end{flushleft}
+\section{安装}
+\begin{flushleft}
+    双击下载好的安装包来安装钱包程序，当钱包程序安装完成后，将可以在开始菜单中找到与BitcoinHD相关的文件夹和程序图标。并且，在你打开了命令提示符的程序后，可以直接输入btchd-miner等相关的命令来执行一些操作。
+\end{flushleft}
+\section{编写配置文件}
+\begin{flushleft}
+    在开始挖矿工作前，需要先编写一个简单的配置文件，用于指定一些与挖矿工作相关的基本信息。
+\end{flushleft}
+\subsection{初始化配置文件}
+\begin{flushleft}
+    我们使用btchd-miner.exe来进行挖矿相关的工作，初始化一份空的配置文件，是它的其中一项功能。你也可以不使用它来初始化该文件，直接把已经撰写好的配置文件复制到你平常挖矿开始的目录中即可，我们在稍后启动挖矿程序时会需要指定该文件的位置。
+\end{flushleft}
+\begin{flushleft}
+    使用下方的命令来初始化一份空的配置文件。
+\end{flushleft}
+\begin{minted}{bash}
+    btchd-miner.exe generate-config
+\end{minted}
+\subsection{填写配置}
+\begin{flushleft}
+    配置文件格式是Json文本，默认命名为``config.json''，下方是一个示例，你的配置文件看起来也会和下面的差不多。
+\end{flushleft}
+\scriptsize
+\begin{minted}{json}
+{
+    "reward": "38CLnjuj31ifZMXZV8UhbyCo3fNP46Lszy",
+    "seed": "bird convince trend skin lumber escape crater describe ...",
+    "plotPath": [
+        "/home/matthew/data/plotfiles1",
+        "/home/matthew/data/plotfiles2"
+    ],
+    "rpc": {
+        "host": "http://127.0.0.1:18732"
+    }
+}
+\end{minted}
+\normalsize
+\subsubsection{BHD奖励地址}
+\begin{flushleft}
+    这是你在BHD网络中的接收挖矿奖励的地址。注意，在你使用这个地址前，需要确保已经将其与你的Chia的P盘文件相关的Farmer公钥相绑定，要了解如何进行绑定操作，请查阅``绑定FarmerId''一节。
+\end{flushleft}
+\subsubsection{Chia钱包seed}
+\begin{flushleft}
+    你在初始化硬盘空间的时候，Chia会需要你提供一个私钥，这个私钥由这个叫做``Seed''的字符串组成，里面是一些单词的组合。我们在产生BHD的区块时，需要用到这个私钥来对区块进行签名，用以验证你的身份。请将该``Seed''粘贴到这时。该私钥只用于签名，并且只保存在本地，不会被上传到BHD的链上或者网络中。
+\end{flushleft}
+\subsubsection{Plot文件目录}
+\begin{flushleft}
+    在这里你需要指定你的Plot文件目录，该登记项是一个数组，你可以同时登记多个Plot文件目录。
+\end{flushleft}
+\subsubsection{本地钱包的RPC连接}
+\begin{flushleft}
+    与本地钱包的RPC连接，如果你使用登录用户名称和密码，可以在这里指定。默认的我们使用``.cookie''文件来完成与钱包的通讯认证，所以在这里只需要登记``host''项即可。
+\end{flushleft}
+\section{绑定FarmerId}
+\begin{flushleft}
+    在挖矿开始前，你需要把你的BHD接收奖励的地址和FarmerId绑定，因为需要做签名，所以你需要先编写正确的配置文件并将你正确的``Seed''和BHD奖励地址填入。使用下方的命令来绑定FarmerId。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+    btchd-miner.exe bind --test
+\end{minted}
+\normalsize
+\begin{itemize}
+    \item ``bind''为主命令
+    \item ``--test''参数，使用测试网络，若没有该参数则命令在主网上执行
+\end{itemize}
+\section{质押BHD}
+\begin{flushleft}
+    将BHD质押到网络上，以获取区块的完整收益，使用下面的命令来进行质押。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+    btchd-miner.exe deposit --amount [质押数量] --term [noterm, term1, term2, term3] --testnet
+\end{minted}
+\normalsize
+\begin{itemize}
+    \item 其中``deposit''为主命令
+    \item ``--amount''参数，用于指定总共质押的货币数量
+    \item ``--term''参数，用于指定锁定的期限。其中：``noterm''为活期， ``term1'', ``term2'', ``term3''分别为不同的锁定期限类型
+    \item ``--testnet''参数，使用测试网络，若没有该参数则命令在主网上执行
+\end{itemize}
+\begin{flushleft}
+    在质押成功后，btchd-miner.exe会显示一个名为``交易id''的哈希值，请将其记下来，在未来需要将质押金额取出的时候，要用到这个``交易id''。
+\end{flushleft}
+\section{退出质押}
+\begin{flushleft}
+    当质押的金额的锁定期限到达后，矿工们可以将质押的金额取出。使用下方的命令来取出。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+    btchd-miner.exe withdraw --txid [交易id] --testnet
+\end{minted}
+\normalsize
+\begin{itemize}
+    \item 其中``withdraw''为主命令
+    \item ``--txid''参数，指定``交易id''，这个``交易id''在之前使用``deposit''命令成功后会被显示出来。
+\end{itemize}
+\section{启动挖矿}
+\subsection{启动节点程序}
+\begin{flushleft}
+    节点程序是整个BitcoinHD的核心，它用于区块的下载，校验以及产生。它同时也管理着本地钱包、私钥，对区块进行签名，维护P2P网络等重要的工作。若要处理网络事务，包含区块下载、校验和挖矿等，该节点程序需要一直保持运行状态。要启动节点程序，请使用下方的命令。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+    btchdd.exe -testnet -server
+\end{minted}
+\normalsize
+\begin{itemize}
+    \item ``-testnet''参数，表示启动测试网络的节点程序，若没有该参数则启动正式网络的节点程序
+    \item ``-server''参数，打开RPC服务器，用于稍后与挖矿程序进行通信
+\end{itemize}
+\subsection{启动挖矿程序}
+\begin{flushleft}
+    当一切都准备就绪后，包括节点已经将所有的区块都同步完成，则可以启动挖矿程序。使用下方的命令来启动。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+    btchd-miner.exe mining --testnet
+\end{minted}
+\normalsize
+\begin{itemize}
+    \item ``mining''为主命令
+    \item ``--testnet''参数，使用测试网络，若没有该参数，则命令在主网上执行
+\end{itemize}

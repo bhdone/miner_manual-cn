@@ -1,0 +1,19 @@
+\documentclass[12pt, a4paper]{report}
+\usepackage[table]{xcolor}
+\usepackage{tikz}
+\usepackage{svg}
+\usepackage{minted}
+\usepackage{xeCJK}
+\setCJKmainfont{uming.ttc}
+\setlength\extrarowheight{5pt}
+\renewcommand*\contentsname{目录}
+\renewcommand*\chaptername{章节}
+\author{BHD开发团队}
+\title{\includesvg{bhd_logo}\\ \Huge\textbf{BitcoinHD使用指南 V2}\\\Large\textit{基于容量证明的数字货币}}
+\begin{document}
+\maketitle
+\tableofcontents
+\include{introduction}
+\include{mining}
+\include{support}
+\end{document}
