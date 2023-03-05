@@ -5,4 +5,4 @@ _minted-bhd-how_to_do_mining
 *.aux
 *.log
 *.toc
-
+*.pyg
