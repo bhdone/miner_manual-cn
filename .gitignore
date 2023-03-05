@@ -1,3 +1,8 @@
 svg-inkscape
 .vscode
 _minted-bhd-how_to_do_mining
+*.pdf
+*.aux
+*.log
+*.toc
+
