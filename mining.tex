@@ -261,27 +261,28 @@ btchdd -server -testnet -timelord -timelord-vdf_client=/home/matthew/chiavdf/src
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner deposit --check --valid
 
-    200711 [ retarget ] 093d4b78b49fa30be40e9156b237184570b93a5003b15534bf39a50a001f6bbb -->
-                        2Mu5hQRdDKNWYYMKNBDAMDFimjop3B5zwYM       123 BHD [ noterm ]
-    200392 [ retarget ] 87e3b2ab348340708a2fa4c175e56a86b4986eedf71ef486943737c02c1cd271 -->
-                        2Mu5hQRdDKNWYYMKNBDAMDFimjop3B5zwYM       500 BHD [ noterm ]
-    200375 [   point  ] 9b55c36accd6728b62be283e23c8fa3560ae1ac0a7828682f53e26d7de6b326b -->
-                        2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ     10000 BHD [  term1 ]
-    200326 [ retarget ] b88888a693c61a426b08d4121dff40ed24154d014419a9b0cccbddd03d795ea9 -->
-                        2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ     50000 BHD [ noterm ]
+btchd-miner deposit --check --valid
+
+ 200381 [   point  ] 0b2292e644a34b0793dd5ad1ef34ea2f7fc9fa3e19823b5d810bc8c8d46e7373 --> 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ
+ 12,345 BHD [  term1 ] actual:      2,469 BHD withdraw:         42 BHD
+
+   --   [   point  ] e2e2aa173b5502b63d1c886468b5dd2d96c4018a21b7db7ea26f7169f635320e --> 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ
+32,323 BHD [  term3 ] actual:      2,585 BHD withdraw:     32,323 BHD
+
 \end{minted}
 \normalsize
 \begin{flushleft}
-    以上是一台测试机上的查询结果，一共查询出四条有效的质押记录，项目分别为
+    以上是一台测试机上关于质押的查询结果，一共查询出两条质押记录，以下为各栏目的说明：
 \end{flushleft}
 \begin{itemize}
-    \item 区块高度，这条质押交易被打包在哪个区块里
-    \item 质押类型，point表示为未被转移的质押，retarget表示质押曾经被转移一次或多次
-    \item 交易哈希，可以复制该哈希值用于质押转移
-    \item 矿工地址，享有该质押的出块地址
-    \item 质押金额及类型，这笔质押总共的质押量及质押的锁定类型，分别为：noterm-无，term1-锁定类型1，term2-锁定类型2，term3-锁定类型3
+    \item 区块高度，这条质押交易被打包在哪个区块里，若区块高度显示为\mintinline{bash}{---}则说明该交易没有被打包到区块中，或其已经失效；注：质押交易需要被打包到区块中才能起效；
+    \item 质押类型，point表示为未被转移的质押，retarget表示质押被转移过一次或多次；
+    \item 交易哈希，这次交易的哈希值，全网唯一。可以复制该哈希值用于质押转移；
+    \item 矿工地址，享有该质押的出块地址。注意，该地址与质押者可以是不同的地址，在质押时可以指定该质押地址；
+    \item 质押金额及类型，这笔质押总共的质押量及质押的锁定类型，分别为：noterm-无，term1-锁定类型1，term2-锁定类型2，term3-锁定类型3。具体的锁定类型对应的期限可以查询白皮书或相关文档，正式网络和测试网络期限不同；
+    \item actual - 根据锁定的类型，当前区块上实际的质押金额；
+    \item withdraw - 若现在取出该笔质押，实际获得的BHD数额，其它的数额将会在链上被销毁；
 \end{itemize}
 \section{退出质押}
 \begin{flushleft}
