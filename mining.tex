@@ -7,7 +7,7 @@
 \section{下载节点程序}
 \begin{flushleft}
     若你使用的操作系统是Windows，请访问BHD的官方网站（https://bhd.one）下载最新版本的BHD钱包，安装完成后，运行钱包程序则可以开始同步区块数据。
-    注意，如果你在使用测试网络，请点击``绿色''图标的那个应用程序来运行节点程序，或者在命令行使用``btchdd -testnet -server''来运行节点程序。
+    注意，如果你在使用测试网络，请点击``绿色''图标的那个应用程序来运行节点程序，或者在命令行使用``\mintinline{bash}{btchdd -testnet -server}''来运行节点程序。
     若你使用的操作系统是Linux，请在官方网站下载对应的安装包。使用tar命令将下载好的包中文件解出，然后将其中所有的文件拷贝至``/usr/local/bin''目录中。
 \end{flushleft}
 \section{安装 - Windows篇}
@@ -264,16 +264,18 @@ btchdd -server -testnet -timelord -timelord-vdf_client=/home/matthew/chiavdf/src
 
 btchd-miner deposit --check --valid
 
- 200381 [   point  ] 0b2292e644a34b0793dd5ad1ef34ea2f7fc9fa3e19823b5d810bc8c8d46e7373 --> 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ
- 12,345 BHD [  term1 ] actual:      2,469 BHD withdraw:         42 BHD
+200381 [   point  ] 0b2292e644a34b0793dd5ad1ef34ea2f7fc9fa3e19823b5d810bc8c8d46e7373
+--> 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ      12,345 BHD [  term1 ]
+2,469 BHD (actual)        111 BHD (withdraw)
 
-   --   [   point  ] e2e2aa173b5502b63d1c886468b5dd2d96c4018a21b7db7ea26f7169f635320e --> 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ
-32,323 BHD [  term3 ] actual:      2,585 BHD withdraw:     32,323 BHD
+  --   [   point  ] e2e2aa173b5502b63d1c886468b5dd2d96c4018a21b7db7ea26f7169f635320e
+--> 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ      32,323 BHD [  term3 ]
+2,585 BHD (actual)     32,323 BHD (withdraw)
 
 \end{minted}
 \normalsize
 \begin{flushleft}
-    以上是一台测试机上关于质押的查询结果，一共查询出两条质押记录，以下为各栏目的说明：
+    以上是一台测试机上关于质押的查询结果，一共查询出两条质押记录。其中，第一条记录被打包到链上，区块高度为200381，已经起效，第二条记录因为已经被取出，所以已经失效。以下为各栏目的说明：
 \end{flushleft}
 \begin{itemize}
     \item 区块高度，这条质押交易被打包在哪个区块里，若区块高度显示为\mintinline{bash}{---}则说明该交易没有被打包到区块中，或其已经失效；注：质押交易需要被打包到区块中才能起效；
@@ -281,7 +283,7 @@ btchd-miner deposit --check --valid
     \item 交易哈希，这次交易的哈希值，全网唯一。可以复制该哈希值用于质押转移；
     \item 矿工地址，享有该质押的出块地址。注意，该地址与质押者可以是不同的地址，在质押时可以指定该质押地址；
     \item 质押金额及类型，这笔质押总共的质押量及质押的锁定类型，分别为：noterm-无，term1-锁定类型1，term2-锁定类型2，term3-锁定类型3。具体的锁定类型对应的期限可以查询白皮书或相关文档，正式网络和测试网络期限不同；
-    \item actual - 根据锁定的类型，当前区块上实际的质押金额；
+    \item actual - 根据锁定的类型，该笔质押在当前的网络上实际的质押金额；
     \item withdraw - 若现在取出该笔质押，实际获得的BHD数额，其它的数额将会在链上被销毁；
 \end{itemize}
 \section{退出质押}
