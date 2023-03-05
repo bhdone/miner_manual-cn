@@ -144,26 +144,50 @@
 \begin{flushleft}
     在质押成功后，``btchd-miner.exe''会显示出一个哈希值，这个哈希值是本次交易的``交易哈希''，请保存下来，未来需要退出质押或者重新绑定质押地址的时候使用。
 \end{flushleft}
-\section{重新绑定}
+\section{质押转移}
 \begin{flushleft}
-    质押在链上的BHD将无法在约定的时间内被全额取出，但是可以将其转移绑定给其它的矿工。
+    质押在链上的BHD将无法在约定的时间内被全额取出，但是可以将其转移给其它的矿工地址。
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe retarget --txid 交易哈希 --revoke-txid 上一次重绑交易哈希 --address 地址 --testnet --no-proxy
+    btchd-miner.exe retarget --txid 交易哈希 --address 地址 --testnet --no-proxy
 \end{minted}
 \normalsize
 \begin{itemize}
     \item 其中``retarget''为主命令
     \item ``\mintinline{bash}{--txid}''参数，用于指定将要被重新绑定的质押交易哈希
-    \item ``\mintinline{bash}{--revoke-txid}''参数，用于指定上一次重新绑定的哈希，若是第一次进行重绑，则该参数可以省略
     \item ``\mintinline{bash}{--address}''参数，用于指定新的被绑定的地址
     \item ``\mintinline{bash}{--testnet}''参数，使用测试网络，若没有该参数则命令在主网上执行
     \item ``\mintinline{bash}{--no-proxy}''参数，跳过本地的proxy设置，直接连接到节点
 \end{itemize}
 \begin{flushleft}
-    为了防止在短时间内某笔质押被频繁重绑，绑定操作有时间间隔规定。该次绑定与质押或上次绑定之间的区块数量不得小于一个既定值。在testnet3测试网上，该数值为10，在正式网络上为7个星期左右。一笔已经重新绑定过的质押可以被再次重绑，命令格式与上方描述相同，需要指定上一次重绑的交易哈希。
+    为了防止在短时间内某笔质押被频繁重绑，绑定操作有时间间隔规定。该次绑定与质押或上次绑定之间的区块数量不得小于一个既定值。在testnet3测试网上，该数值为10，在正式网络上为7个星期左右。一笔已经重新绑定过的质押可以被再次重绑，命令格式与上方描述相同，需要指定上一次重绑的交易哈希。另外，只有该质押的拥有者才可以转移该质押。
 \end{flushleft}
+\section{查询质押}
+\begin{flushleft}
+    你可以通过使用``\mintinline{bash}{btchd-cli}''命令来查询与当前账号相关的质押，通过这个命令你可以了解到相关的txid并将其用在质押命令上。在命令行中显示的内容是一个json的文本，如下方的示例显示，可以看到质押的交易哈希，金额，区块高度，类型等信息。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+btchd-cli.exe -testnet listpledges
+[
+{
+    "txid": "d88dc9991696fa95e088f13ccbec5970975a26e1f2434c3c7d0e78508c42d4f5",
+    "amount": 50000.00000000,
+    "from": "2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ",
+    "to": "2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ",
+    "category": "self",
+    "payloadType": 24,
+    "payloadTypeStr": "DATACARRIER_TYPE_CHIA_POINT_TERM_3",
+    "blockhash": "10476179ce364d40b4f7e7e34ad42a36f33c16815653693bc7709b7d2f4496dc",
+    "blocktime": 1675404017,
+    "blockheight": 200175,
+    "valid": true,
+    "chia": true
+}
+]
+\end{minted}
+\normalsize
 \section{退出质押}
 \begin{flushleft}
     当质押的金额的锁定期限到达后，矿工们可以将质押的金额取出。使用下方的命令。
