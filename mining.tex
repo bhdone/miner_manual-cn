@@ -211,6 +211,18 @@ $ btchd-miner mining --timelord --timelord-host=timelord.bhd.one
 \end{minted}
 \normalsize
 \subsubsection{速度测试}
+\begin{flushleft}
+    通过Docker命令来运行vdf\_bench也可以进行速度测试。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+$ docker run -it timelord /vdf_bench square_asm 50000
+\end{minted}
+\normalsize
+\begin{flushleft}
+    速度测试命令执行完成后同样也会显示出当前电脑每秒钟运行的vdf计算数量。但是，值得注意的是，同样一台电脑使用Docker来运行
+    vdf计算会有一定的速度损失(20\%左右)，配置一台Linux或macOS来运行vdf计算是一个比较好的选择。
+\end{flushleft}
 \subsection{一个完整的节点启动示例}
 \scriptsize
 \begin{minted}{bash}
@@ -283,8 +295,9 @@ $ btchd-miner generate-config
 \end{flushleft}
 \subsubsection{本地钱包的RPC连接``rpc''}
 \begin{flushleft}
-    与本地钱包的RPC连接，如果你使用登录用户名称和密码，可以在这里指定。默认的我们使用``.cookie''文件来完成与钱包的通讯认
-    证，所以在这里只需要登记``host''项即可。
+    与本地钱包的RPC连接，如果你使用登录用户名称和密码，可以在这里添加``user''和``password''选项。默认的我们使用
+    ``.cookie''文件来完成与钱包的通讯认证，所以在这里只需要登记``host''项即可，``user''和``password''两个选项在使用cookie
+    登录方式的情况下不需要指定。
 \end{flushleft}
 \section{基本参数介绍}
 \subsection{节点程序``btchdd''}
@@ -352,7 +365,6 @@ $ btchd-miner bind
 \scriptsize
 \begin{minted}{bash}
 $ btchd-miner bind --check
-
   --> txid: b6037724221c1a21b183596f25cfcf46da90ce87c67f4fb93d74dce5dd977463
     height: 200003
    address: 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ
