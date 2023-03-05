@@ -296,6 +296,12 @@ btchdd -server -testnet -timelord -timelord-vdf_client=/home/matthew/chiavdf/src
     \item 其中``withdraw''为主命令
     \item ``\mintinline{bash}{--txid}''参数，指定``交易哈希''，这个``交易哈希''在之前使用``deposit''命令成功后会被显示出来。
 \end{itemize}
+\subsection{提早退出}
+\begin{flushleft}
+    提早退出质押是被允许的，但是会按照质押不足相应销毁掉一定数量的BHD。销毁的BHD将退出流通，总的BHD发行量将会减少，
+    并且同时影响矿工所需要的质押货币量。例如：假设你质押了一笔为期3年的$1000_{BHD}$，但是在质押时间刚到一年的时候，
+    你将这笔质押的金额取出，该质押将只有$333_{BHD}$被取出，而其余的$667_{BHD}$将在链上被直接销毁。
+\end{flushleft}
 \section{启动挖矿}
 \subsection{启动节点程序}
 \begin{flushleft}
