@@ -5,11 +5,12 @@
 \end{flushleft}
 \section{下载节点程序}
 \begin{flushleft}
-    请访问BHD的官方网站（https://bhd.one）下载最新版本的BHD钱包，安装完成后，运行钱包程序则可以开始同步区块数据。注意，如果你在使用测试网络，请点击``绿色''图标的那个应用程序来运行节点程序，或者在命令行使用``btchdd.exe -testnet -server''来运行节点程序。
+    若你使用的操作系统是Windows，请访问BHD的官方网站（https://bhd.one）下载最新版本的BHD钱包，安装完成后，运行钱包程序则可以开始同步区块数据。注意，如果你在使用测试网络，请点击``绿色''图标的那个应用程序来运行节点程序，或者在命令行使用``btchdd -testnet -server''来运行节点程序。
+    若你使用的操作系统是Linux，请在官方网站下载对应的安装包。使用tar命令将下载好的包中文件解出，然后将其中所有的文件拷贝至``/usr/local/bin''目录中。
 \end{flushleft}
-\section{安装}
+\section{安装 - Windows篇}
 \begin{flushleft}
-    双击下载好的安装包来安装钱包程序，当钱包程序安装完成后，将可以在开始菜单中找到与BitcoinHD相关的文件夹和程序图标。并且，在你打开了命令提示符的程序后，可以直接输入btchd-miner等相关的命令来执行一些操作。
+    双击下载好的安装包来安装钱包程序，当钱包程序安装完成后，将可以在开始菜单中找到与BitcoinHD相关的文件夹和程序图标。并且，在你打开了命令提示符的程序后，可以直接输入btchd-miner等相关的命令来执行操作。
 \end{flushleft}
 \subsection{添加搜索路径}
 \begin{flushleft}
@@ -20,7 +21,7 @@
     \item 依次打开：Windows开始菜单-设置-系统-关于-高级系统设置-环境变量；
     \item 在打开的窗口里有两个列表，在上方的第一个列表中找到``path''项目，双击它打开路径编辑窗口；
     \item 点击``新建''按钮，将复制好的目录粘贴到列表中，然后点击确定保存；
-    \item 重新打开你的命令行窗口，这时输入``btchd-miner.exe --help''后应该可以看到命令被正确调用；
+    \item 重新打开你的命令行窗口，这时输入``btchd-miner --help''后应该可以看到命令被正确调用；
 \end{enumerate}
 \subsection{配置节点RPC服务}
 \begin{flushleft}
@@ -32,20 +33,63 @@
     \item 在打开的文本编辑器中输入``server=1''，然后保存；
     \item 关闭钱包并重启，此时挖矿程序将可以正确连接；
 \end{enumerate}
-\section{编写配置文件}
+\section{安装 - Linux篇}
+\subsection{下载与安装}
+\begin{flushleft}
+    首先使用wget或curl将Linux版本的程序包下载到本地，然后使用``tar xf 程序包路径''将包中所有的文件解开。然后再将这些命令复制到``/usr/local/bin''目录中。注意：你若不是root用户，那么需要使用``sudo''命令来执行拷贝工作。如下所示：
+\end{flushleft}
+\begin{minted}{bash}
+    sudo cp btchd/* /usr/local/bin/
+\end{minted}
+\begin{flushleft}
+此时，输入``\mintinline{bash}{btchd-miner --help}''会显示出挖矿程序的基本使用说明。Linux版本的钱包节点程序通过命令行参数则可以进行配置，不需要额外修改配置文件。但是挖矿的配置程序是必需的，后续的章节若没有做特殊说明，则表示这些配置和操作在各操作系统下是相同的。
+\end{flushleft}
+\subsection{配置chiavdf运行时间证明}
+\subsubsection{什么是时间证明？}
+\begin{flushleft}
+BHD这次升级不仅使用了chia的PoS容量证明，同时也使用了PoT时间证明。通过时间证明的结果将更好的保证网络的安全性。每次矿工产生新的区块，都将被要求在该区块中包含一个或多个时间证明的结果。这个时间证明的结果可以通过运行时间证明计算器来获得。
+\end{flushleft}
+\subsubsection{我要运行时间证明计算器吗？}
+\begin{flushleft} 
+时间证明运算器是一个可选的组件，但是如果在本地运行时间证明运算器，那么则可以最快的获取结果，更有利于当前的出块操作。若不运行时间证明，那么所需的证明结果会通过P2P网络去请求其它运行了时间证明的节点来获得，这样可能会因为网络延迟等其它的原因导致出块延迟或出不了块。
+\end{flushleft}
+\subsubsection{时间证明运算器运行条件}
+\begin{itemize}
+    \item 操作系统需要Linux或macOS；
+    \item 机器中有一块较好的cpu，若cpu主频太差，那么时间证明的结果获取太慢，也没有意义；
+\end{itemize}
+\subsubsection{下载时间证明运算器}
+\begin{flushleft}
+    BHD直接延用chia的时间证明运算器，你可以自行下载该项目的源代码并在Linux本地进行编译。或者在BHD的官网上下载我们为你编译好的版本。该项目的源代码的github地址为：``https://github.com/chia-network/chiavdf''。该项目将会通过编译生成一个名为``vdf$\_$client''的文件，该文件就是时间证明运算器，是一个可执行程序，后续启动节点时需要指定该文件的完整路径。
+\end{flushleft}
+\subsection{启动节点并运行时间证明运算器}
+\begin{flushleft}
+    若不打算在本地运行时间证明运算器，则在启动钱包节点时只需要带上``\mintinline{bash}{btchdd -server}''即可（若是测试网络则需要加上``\mintinline{bash}{-testnet}''）。若打算运行时间证明运算器，那么请同时添加``\mintinline{bash}{-timelord -timelord-vdf_client}=[the full path to vdf\_client binary]''。
+\end{flushleft}
+\begin{itemize}
+    \item \mintinline{bash}{-timelord}，该参数表示启动时间证明运算器；
+    \item \mintinline{bash}{-timelord-vdf_client}，该参数指明运算器的完整路径；
+\end{itemize}
+\subsection{一个完整的节点启动示例}
+\scriptsize
+\begin{minted}{bash}
+btchdd -server -testnet -timelord -timelord-vdf_client=/home/matthew/chiavdf/src/vdf_client
+\end{minted}
+\normalsize
+\section{编写挖矿配置文件}
 \begin{flushleft}
     在开始挖矿工作前，需要先编写一个简单的配置文件，用于指定一些与挖矿工作相关的基本信息。
 \end{flushleft}
 \subsection{初始化配置文件}
 \begin{flushleft}
-    我们使用btchd-miner.exe来进行挖矿相关的工作，初始化一份空的配置文件，是它的其中一项功能。你也可以不使用它来初始化该文件，直接把已经撰写好的配置文件复制到你平常挖矿开始的目录中即可，我们在稍后启动挖矿程序时会需要指定该文件的位置。
+我们使用btchd-miner来进行挖矿相关的工作，初始化一份空的配置文件，是它的其中一项功能。你也可以不使用它来初始化该文件，直接把已经撰写好的配置文件复制到你平常挖矿开始的目录中即可，我们在稍后启动挖矿程序时会需要指定该文件的位置。
 \end{flushleft}
 \begin{flushleft}
     使用下方的命令来初始化一份空的配置文件。
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe generate-config
+    btchd-miner generate-config
 \end{minted}
 \normalsize
 \begin{flushleft}
@@ -86,7 +130,7 @@
 \end{flushleft}
 \subsubsection{Chia钱包助词词``seed''}
 \begin{flushleft}
-    你在初始化硬盘空间的时候，Chia会需要你提供一个私钥，这个私钥由这个叫做``Seed''的字符串组成，里面是一些单词的组合。我们在产生BHD的区块时，需要用到这个私钥来对区块进行签名，用以验证你的身份。请将该``Seed''粘贴到这时。该私钥只用于签名，并且只保存在本地，不会被上传到BHD的链上或者网络中。
+你在初始化硬盘空间的时候，Chia会需要你提供一个私钥，这个私钥由这个叫做``Seed''的字符串组成，里面是一些单词的组合。我们在产生BHD的区块时，需要用到这个私钥来对区块进行签名，用以验证你的身份。请将该``Seed''粘贴到这时。该私钥只用于签名，并且只保存在本地，不会被上传到BHD的链上或者网络中。
 \end{flushleft}
 \subsubsection{Plot文件目录``plotPath''}
 \begin{flushleft}
@@ -97,7 +141,7 @@
     与本地钱包的RPC连接，如果你使用登录用户名称和密码，可以在这里指定。默认的我们使用``.cookie''文件来完成与钱包的通讯认证，所以在这里只需要登记``host''项即可。
 \end{flushleft}
 \section{基本参数介绍}
-\subsection{节点程序``btchdd.exe''}
+\subsection{节点程序``btchdd''}
 \subsubsection{参数}
 \begin{itemize}
     \item ``-testnet''参数，启动测试网络的节点程序，若不带该参数则表示启动正式网络的节点程序
@@ -107,7 +151,7 @@
 \end{itemize}
 \begin{flushleft}
     注：与timelord相关的参数只能在Linux下运行，同时你需要编译chiavdf项目。``timelord''相关的参数，用于在本地计算并获取时间证明。关于时间证明的相关信息，可以参考BHD新版本的白皮书中与VDF相关的章节。另外，因为VDF计算暂时还没有Windows版本，若要运行VDF则需要使用Linux操作系统。因为每次出块，都需要获取与当前PoS相关的一个时间证明，所以，若在本地运行VDF则可以确保自己以在第一时间收到正确的证明答案。若没有在本地运行时间证明，那么需要通过网络将证明请求发送至可以计算证明的节点，在节点获得答案后会将其发回到本地。我们鼓励节点在本地运行时间证明，这样对于矿工本身和整个网络来说都是有益的。
-\end{flushleft}\subsection{挖矿程序``btchd-miner.exe''}
+\end{flushleft}\subsection{挖矿程序``btchd-miner''}
 \begin{flushleft}
     挖矿程序的参数由``主命令''和``命令参数''两部分组成。``主命令''指明当前要做的工作类型，``命令参数''将补全当前操作相关的参数。
 \end{flushleft}
@@ -127,7 +171,7 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe bind
+    btchd-miner bind
 \end{minted}
 \normalsize
 \begin{itemize}
@@ -158,7 +202,7 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe deposit --amount 质押数量 --term [noterm, term1, term2, term3]
+    btchd-miner deposit --amount 质押数量 --term [noterm, term1, term2, term3]
 \end{minted}
 \normalsize
 \begin{itemize}
@@ -167,7 +211,7 @@
     \item ``\mintinline{bash}{--term}''参数，用于指定锁定的期限。其中：``noterm''为活期， ``term1'', ``term2'', ``term3''分别为不同的锁定期限类型
 \end{itemize}
 \begin{flushleft}
-    在质押成功后，``btchd-miner.exe''会显示出一个哈希值，这个哈希值是本次交易的``交易哈希''，请保存下来，未来需要退出质押或者重新绑定质押地址的时候使用。
+    在质押成功后，``btchd-miner''会显示出一个哈希值，这个哈希值是本次交易的``交易哈希''，请保存下来，未来需要退出质押或者重新绑定质押地址的时候使用。
 \end{flushleft}
 \section{质押转移}
 \begin{flushleft}
@@ -175,7 +219,7 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe retarget --txid 交易哈希 --address 地址
+    btchd-miner retarget --txid 交易哈希 --address 地址
 \end{minted}
 \normalsize
 \begin{itemize}
@@ -192,7 +236,7 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe deposit --check --valid
+    btchd-miner deposit --check --valid
 
     200711 [ retarget ] 093d4b78b49fa30be40e9156b237184570b93a5003b15534bf39a50a001f6bbb -->
                         2Mu5hQRdDKNWYYMKNBDAMDFimjop3B5zwYM       123 BHD [ noterm ]
@@ -220,7 +264,7 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe withdraw --txid 交易哈希
+    btchd-miner withdraw --txid 交易哈希
 \end{minted}
 \normalsize
 \begin{itemize}
@@ -234,7 +278,7 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchdd.exe -testnet -server
+    btchdd -testnet -server
 \end{minted}
 \normalsize
 \begin{itemize}
@@ -247,7 +291,7 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner.exe mining
+    btchd-miner mining
 \end{minted}
 \normalsize
 \begin{itemize}
