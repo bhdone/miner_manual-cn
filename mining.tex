@@ -2,25 +2,41 @@
 \section{初始化空间（P盘）}
 \begin{flushleft}
     初始化空间，俗称P盘。请参考Chia官方的网站上与P盘相关的信息。请注意，使用Chia的钱包生成的与私钥相关的Seed，在稍后需要
-    复制到配置文件中，用来对区块进行签名。
+    复制到配置文件中，用来对挖到的区块进行数字签名。
 \end{flushleft}
 \section{下载节点程序}
+\subsection{Windows}
 \begin{flushleft}
-    若你使用的操作系统是Windows，请访问BHD的官方网站（https://bhd.one）下载最新版本的BHD钱包，安装完成后，运行钱包程序则可以开始同步区块数据。
-    注意，如果你在使用测试网络，请点击``绿色''图标的那个应用程序来运行节点程序，或者在命令行使用``\mintinline{bash}{btchdd -testnet -server}''来运行节点程序。
-    若你使用的操作系统是Linux，请在官方网站下载对应的安装包。使用tar命令将下载好的包中文件解出，然后将其中所有的文件拷贝至``/usr/local/bin''目录中。
+    若你使用的操作系统是Windows，请访问BHD的官方网站（https://bhd.one）下载最新版本的BHD节点钱包安装文件并双击进行安装。
+    安装完成后，运行钱包程序则可以开始同步区块数据。注意，如果你在使用测试网络，请点击``绿色''的应用程序图标来运行带图形
+    操作界面的对应测试网络的节点钱包程序。带黄色图标的程序是对应正式网络的节点钱包，在测试阶段请不要运行该程序。
+\end{flushleft}
+\begin{flushleft}
+    你也可以运行控制台版本的节点钱包程序。在命令行执行``\mintinline{bash}{btchdd -testnet -server}''来启动控制台节点钱包。
+    参数``\mintinline{bash}{-testnet}''表明启动该节点并连接至测试网络。
+\end{flushleft}
+\subsection{Linux}
+\begin{flushleft}
+    若你使用的操作系统是Linux，请在官方网站下载对应的安装包。使用tar命令将下载包里的文件解出，然后将其中所有的文件拷贝至
+    ``/usr/local/bin''目录中。Linux压缩包中同时包含控制台版本和图形界面版本的节点钱包，运行方式和Windows下一致。
+\end{flushleft}
+\subsection{macOS}
+\begin{flushleft}
+    macOS的安装包是扩展名为.dmg的文件，在macOS中双击该文件并且将里面的BitcoinHD图标拖动到Application文件夹中完成安装。剩下
+    的工作和Windows/Linux一致，你需要找到带绿色图标的节点钱包并运行，或者使用控制台版本的节点钱包，同Windows。
 \end{flushleft}
 \section{安装 - Windows篇}
 \begin{flushleft}
-    双击下载好的安装包来安装钱包程序，当钱包程序安装完成后，将可以在开始菜单中找到与BitcoinHD相关的文件夹和程序图标。
-    并且，在你打开了命令提示符的程序后，可以直接输入btchd-miner等相关的命令来执行操作。
+    双击下载好的安装包来安装钱包程序，当钱包程序安装完成后，将可以在开始菜单中找到与BitcoinHD相关的文件夹和程序图标。并且，
+    在你打开了命令提示符的程序后，可以直接输入btchd-miner等相关的命令来执行操作。
 \end{flushleft}
 \subsection{添加搜索路径}
 \begin{flushleft}
     安装完成后，你需要将BitcoinHD的daemon文件夹添加到系统的路径搜索列表里，具体操作如下：
 \end{flushleft}
 \begin{enumerate}
-    \item 将BitcoinHD的安装目录的子目录``daemon''在资源管理器中复制下来，通常为``C:\symbol{92}Program Files\symbol{92}BitcoinHD\symbol{92}daemon''；
+    \item 将BitcoinHD的安装目录的子目录``daemon''在资源管理器中复制下来，通常为
+        ``C:\symbol{92}Program Files\symbol{92}BitcoinHD\symbol{92}daemon''；
     \item 依次打开：Windows开始菜单-设置-系统-关于-高级系统设置-环境变量；
     \item 在打开的窗口里有两个列表，在上方的第一个列表中找到``path''项目，双击它打开路径编辑窗口；
     \item 点击``新建''按钮，将复制好的目录粘贴到列表中，然后点击确定保存；
@@ -28,7 +44,8 @@
 \end{enumerate}
 \subsection{配置节点RPC服务}
 \begin{flushleft}
-    默认的情况下，如果你使用GUI版本的钱包，它是不能直接与挖矿程序进行通讯的。如果你需要使用GUI版本的钱包来挖矿，则需要修改其配置：
+    默认的情况下，如果你使用GUI版本的钱包，它是不能直接与挖矿程序进行通讯的。如果你需要使用GUI版本的钱包来挖矿，则需要修
+    改其配置：
 \end{flushleft}
 \begin{enumerate}
     \item 打开钱包，注：若是使用测试网络，请双击绿色的那个图标；
@@ -39,51 +56,165 @@
 \section{安装 - Linux篇}
 \subsection{下载与安装}
 \begin{flushleft}
-    首先使用wget或curl将Linux版本的程序包下载到本地，然后使用``tar xf 程序包路径''将包中所有的文件解开。然后再将这些命令复制
-    到``/usr/local/bin''目录中。注意：你若不是root用户，那么需要使用``sudo''命令来执行拷贝工作。如下所示：
+    首先使用wget或curl将Linux版本的程序包下载到本地，然后使用``tar xf 程序包路径''将包中所有的文件解开。然后再将这些命令
+    复制到``/usr/local/bin''目录中。注意：你若不是root用户，那么需要使用``sudo''命令来执行拷贝工作。如下所示：
 \end{flushleft}
+\scriptsize
 \begin{minted}{bash}
-    sudo cp btchd/* /usr/local/bin/
+$ sudo cp btchd/* /usr/local/bin/
 \end{minted}
+\normalsize
 \begin{flushleft}
-    此时，输入``\mintinline{bash}{btchd-miner --help}''会显示出挖矿程序的基本使用说明。Linux版本的钱包节点程序通过命令行参数则可以进行配置，
-    不需要额外修改配置文件。但是挖矿的配置程序是必需的，后续的章节若没有做特殊说明，则表示这些配置和操作在各操作系统下是相同的。
+    此时，输入``\mintinline{bash}{btchd-miner --help}''会显示出挖矿程序的基本使用说明。Linux版本的钱包节点程序通过命令行
+    参数则可以进行配置，不需要额外修改配置文件。但是挖矿的配置程序是必需的，后续的章节若没有做特殊说明，则表示这些配置和
+    操作在各操作系统下是相同的。
 \end{flushleft}
 \subsection{配置chiavdf运行时间证明}
 \subsubsection{什么是时间证明？}
 \begin{flushleft}
     BHD这次升级不仅使用了chia的PoS容量证明，同时也使用了PoT时间证明。通过时间证明的结果将更好的保证网络的安全性。
-    每次矿工产生新的区块，都将被要求在该区块中包含一个或多个时间证明的结果。这个时间证明的结果可以通过运行时间证明计算器来获得。
+    每次矿工产生新的区块，都将被要求在该区块中包含一个或多个时间证明的结果。这个时间证明的结果可以通过运行时间证明计算器
+    来获得。
 \end{flushleft}
 \subsubsection{我要运行时间证明计算器吗？}
 \begin{flushleft}
     时间证明运算器是一个可选的组件，但是如果在本地运行时间证明运算器，那么则可以最快的获取结果，更有利于当前的出块操作。
-    若不运行时间证明，那么所需的证明结果会通过P2P网络去请求其它运行了时间证明的节点来获得，这样可能会因为网络延迟等其它的原因导致出块延迟或出不了块。
+    若不运行时间证明，那么所需的证明结果会通过P2P网络去请求其它运行了时间证明的节点来获得，这样可能会因为网络延迟等其它的
+    原因导致出块延迟或出不了块。
 \end{flushleft}
 \subsubsection{时间证明运算器运行条件}
 \begin{itemize}
     \item 操作系统需要Linux或macOS；
     \item 机器中有一块较好的cpu，若cpu主频太差，那么时间证明的结果获取太慢，也没有意义；
 \end{itemize}
+\subsubsection{测试电脑的vdf计算速度}
+\begin{flushleft}
+    若你自行编译了工程chiavdf，那么可以在chiavdf/src目录下找到一个名为vdf\_bench的可执行文件，运行该文件可以获得当前电脑
+    vdf运算的速度，使用命令``\mintinline{bash}{vdf_bench square_asm 50000}''，该命令会让vdf\_bench执行指定数量的计算，
+    然后获得每秒的vdf计算量并显示出来。例如，我在一台MacbookPro A1707上运行得到的结果是每秒150k ips左右，而在一台将近10年
+    的老式PC上计算的结果是130k ips左右，而在一台安装了i5 10600kf的电脑上得到的结果是每秒200k ips左右。
+\end{flushleft}
 \subsubsection{下载时间证明运算器}
 \begin{flushleft}
-    BHD直接延用chia的时间证明运算器，你可以自行下载该项目的源代码并在Linux本地进行编译。或者在BHD的官网上下载我们为你编译好的版本。
-    该项目的源代码的github地址为：``https://github.com/chia-network/chiavdf''。该项目将会通过编译生成一个名为``vdf$\_$client''的文件，
-    该文件就是时间证明运算器，是一个可执行程序，后续启动节点时需要指定该文件的完整路径。
+    BHD直接延用chia的时间证明运算器，你可以自行下载该项目的源代码并在Linux本地进行编译。或者在BHD的官网上下载我们为你编译
+    好的版本。该项目的源代码的github地址为：``https://github.com/chia-network/chiavdf''。该项目将会通过编译生成一个名为
+    ``vdf\_client''的文件，该文件就是时间证明运算器，是一个可执行程序，后续启动节点时需要指定该文件的完整路径。
 \end{flushleft}
 \subsection{启动节点并运行时间证明运算器}
 \begin{flushleft}
-    若不打算在本地运行时间证明运算器，则在启动钱包节点时只需要带上``\mintinline{bash}{btchdd -server}''即可（若是测试网络则需要加上``\mintinline{bash}{-testnet}''）。
-    若打算运行时间证明运算器，那么请同时添加``\mintinline{bash}{-timelord -timelord-vdf$\_$client}=[the full path to vdf\_client binary]''。
+    若不打算在本地运行时间证明运算器，则在启动钱包节点时只需要带上``\mintinline{bash}{btchdd -server}''即可（若是测试网络
+    则需要加上``\mintinline{bash}{-testnet}''）。若打算运行时间证明运算器，那么请同时添加
+    ``\mintinline{bash}{-timelord -timelord-vdf_client}=[the full path to vdf\_client binary]''。
 \end{flushleft}
 \begin{itemize}
     \item \mintinline{bash}{-timelord}，该参数表示启动时间证明运算器；
-    \item \mintinline{bash}{-timelord-vdf$\_$client}，该参数指明运算器的完整路径；
+    \item \mintinline{bash}{-timelord-vdf_client}，该参数指明运算器的完整路径；
 \end{itemize}
+\subsection{使用Timelord}
+\begin{flushleft}
+    Timelord是一个桥梁程序，用于执行vdf\_client并获得计算结果并返回给Miner，它与节点钱包启动时通过过自带timelord参数来
+    获取计算结果相比，有以下几个优点：
+\end{flushleft}
+\begin{itemize}
+    \item 不依附节点钱包，直接通过socket与Miner连接，获得的结果直接返回给Miner出块打包；
+    \item 结果不再上传至P2P网络，不再造成P2P网络中数据包过多的问题；
+    \item 其被编译打包成为Docker容器，使其可以在Windows下被直接运行，Windows的矿工也可以通过其获得vdf计算结果；
+    \item BHD社区也会推出公共的timelord服务，供那些不运行timelord的用户获取vdf证明结果；
+\end{itemize}
+\subsubsection{启动Timelord}
+\begin{flushleft}
+    Timelord可以在Linux下被编译运行，若你使用Windows操作系统，请参考``本地使用Docker来运行''那一章节的内容。
+\end{flushleft}
+\begin{flushleft}
+    请前往(https://bhd.one)相关页面下载已经编译好的Linux包，并且将其中的文件解压缩至可运行目录，通常是``/usr/local/bin''。
+    解压出来有三个可执行的文件，分别为：timelord, vdf\_client, vdf\_bench。其中timelord是主执行文件，用于执行timelord服务，
+    vdf\_client由timelord调用获取vdf答案，vdf\_bench用来测试当前的电脑获取vdf答案的速度。
+\end{flushleft}
+\begin{flushleft}
+    timelord的工作流程如下：首先，timelord通过socket连接至节点钱包的RPC服务，通过节点钱包查询到当前网络中最新的区块的
+    challenge。同一时间，miner可以连接至timelord并且向timelord请求计算。timelord会检查miner的请求中的challenge，若和当前
+    网络中的challenge一至且相关的计算没有开始，则会开始启动计算。多个miner请求的iters的值不同，所以当对应某个iters的答案
+    计算出来后，将直接通过socket返回给对应的miner。若节点钱包的最新区块已经改变，则需要停止当前的计算，准备启动下一个计算
+    的服务。
+\end{flushleft}
+\begin{flushleft}
+    使用``\mintinline{bash}{--help}''可以获得timelord命令的帮助信息，timelord的命令主要分为：节点钱包连接参数，miner服务
+    参数和vdf\_client相关参数。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+Timelord, run vdf and returns proofs
+Usage:
+  Timelord [OPTION...]
+
+      --help                 Show help document
+      --logfile arg          Store logs into file (default: ./timelord.log)
+  -v, --verbose              Show more logs
+      --addr arg             Listening to address (default: 127.0.0.1)
+      --port arg             Listening on this port (default: 19191)
+      --vdf_client-path arg  The full path to `vdf_client` (default:
+                             $HOME/chiavdf/src/vdf_client)
+      --vdf_client-addr arg  vdf_client will listen to this address
+                             (default: 127.0.0.1)
+      --vdf_client-port arg  vdf_client will listen to this port (default:
+                             29292)
+      --rpc arg              The endpoint of btchd core (default:
+                             http://127.0.0.1:18732)
+      --cookie arg           Full path to the `.cookie` file generated by
+                             btchd core (default:
+                             $HOME/.btchd/testnet3/.cookie)
+      --rpc-user arg         The username to identify RPC connection
+      --rpc-password arg     The password to verify RPC connection
+\end{minted}
+\normalsize
+\begin{flushleft}
+    需要关心的参数首先是参数``\mintinline{bash}{--vdf_client-path}''，该参数指定你的vdf\_client所在的完整路径。其次，你
+    需要指定节点钱包的RPC连接地址，通过参数``\mintinline{bash}{--rpc}''来指定连接的目的地，注意，若你的节点程序没有设置
+    用户名和密码，那么你需要指定``\mintinline{bash}{.cookie}''所在的位置，否则请通过``\mintinline{bash}{--rpc-user}''和
+    ``\mintinline{bash}{--rpc-password}''来指定用户名和密码。
+\end{flushleft}
+\subsubsection{Miner如何连接Timelord}
+\begin{flushleft}
+    Miner中有三个参数用于指定其需要连接的timelord服务，分别为：``\mintinline{bash}{--timelord}''，
+    ``\mintinline{bash}{--timelord-host}''，``\mintinline{bash}{--timelord-port}''，第一个参数表示需要与timelord连接来获取
+    vdf答案，后面两个参数分别指定timelord的连接地址及端口。
+\end{flushleft}
+\subsubsection{本地使用Docker来运行}
+\begin{flushleft}
+    首先下载并安装Docker，相关的信息可以在(https://docker.io)找到。安装好Docker之后，在命令行窗口可以输入docker来执行相关
+    的命令。这时，可以执行命令：``\mintinline{bash}{docker pull bhdone/timelord}''来下载已经编译好的docker包到本地。为了
+    方便起见，该镜像包同时包含有timelord, vdf\_client和vdf\_bench。
+\end{flushleft}
+\begin{flushleft}
+    首先，需要配置节点钱包，使其RPC服务需要使用用户名和密码来登录，添加参数：``\mintinline{bash}{-rpcuser=hello}''，和
+    ``\mintinline{bash}{-rpcpassword=world}''，这样就设置了RPC服务的登录用户名和密码。
+\end{flushleft}
+\begin{flushleft}
+    然后，在命令行窗口中输入下方命令启动Docker镜像中的timelord，注意要将与用户名和密码相关的参数修改成你之前设置的值。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+$ docker run --add-host host.docker.internal:host-gateway -it timelord
+    /timelord --rpc=http://host.docker.internal:18732
+    --rpc-user=hello --rpc-password=world --vdf_client-path=/vdf_client
+\end{minted}
+\normalsize
+\subsubsection{连接至公共的Timelord}
+\begin{flushleft}
+    连接至公共的Timelord，可以直接在miner的参数添加公共的timelord的地址和端口即可，假设有一台timelord服务器的hostname为：
+    timelord.bhd.one，端口为：19191，那么可以使用下方的命令来进行连接。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+$ btchd-miner mining --timelord --timelord-host=timelord.bhd.one
+    --timelord-port=19191
+\end{minted}
+\normalsize
+\subsubsection{速度测试}
 \subsection{一个完整的节点启动示例}
 \scriptsize
 \begin{minted}{bash}
-    btchdd -server -testnet -timelord -timelord-vdf$\_$client=/home/matthew/chiavdf/src/vdf$\_$client
+$ btchdd -server -testnet -timelord -timelord-vdf_client=/home/matthew/chiavdf/src/vdf_client
 \end{minted}
 \normalsize
 \section{编写挖矿配置文件}
@@ -100,7 +231,7 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner generate-config
+$ btchd-miner generate-config
 \end{minted}
 \normalsize
 \begin{flushleft}
@@ -137,8 +268,8 @@
 \end{flushleft}
 \subsubsection{BHD奖励地址``reward''}
 \begin{flushleft}
-    这是你在BHD网络中的接收挖矿奖励的地址。注意，在你使用这个地址前，需要确保已经将其与你的Chia的P盘文件相关的Farmer公钥相绑定，
-    要了解如何进行绑定操作，请查阅``绑定FarmerId''一节。
+    这是你在BHD网络中的接收挖矿奖励的地址。注意，在你使用这个地址前，需要确保已经将其与你的Chia的P盘文件相关的Farmer公钥
+    相绑定，要了解如何进行绑定操作，请查阅``绑定FarmerId''一节。
 \end{flushleft}
 \subsubsection{Chia钱包助词词``seed''}
 \begin{flushleft}
@@ -152,8 +283,8 @@
 \end{flushleft}
 \subsubsection{本地钱包的RPC连接``rpc''}
 \begin{flushleft}
-    与本地钱包的RPC连接，如果你使用登录用户名称和密码，可以在这里指定。默认的我们使用``.cookie''文件来完成与钱包的通讯认证，
-    所以在这里只需要登记``host''项即可。
+    与本地钱包的RPC连接，如果你使用登录用户名称和密码，可以在这里指定。默认的我们使用``.cookie''文件来完成与钱包的通讯认
+    证，所以在这里只需要登记``host''项即可。
 \end{flushleft}
 \section{基本参数介绍}
 \subsection{节点程序``btchdd''}
@@ -165,15 +296,16 @@
     \item ``-timelord-vdf\_client''参数，当指明了``-timelord''参数时，需要同时添加本参数来指定``vdf\_client''的路径
 \end{itemize}
 \begin{flushleft}
-    注：与timelord相关的参数只能在Linux下运行，同时你需要编译chiavdf项目。``timelord''相关的参数，用于在本地计算并获取时间证明。
-    关于时间证明的相关信息，可以参考BHD新版本的白皮书中与VDF相关的章节。另外，因为VDF计算暂时还没有Windows版本，
+    注：与timelord相关的参数只能在Linux下运行，同时你需要编译chiavdf项目。``timelord''相关的参数，用于在本地计算并获取
+    时间证明。关于时间证明的相关信息，可以参考BHD新版本的白皮书中与VDF相关的章节。另外，因为VDF计算暂时还没有Windows版本，
     若要运行VDF则需要使用Linux操作系统。因为每次出块，都需要获取与当前PoS相关的一个时间证明，所以，若在本地运行VDF则可以
     确保自己以在第一时间收到正确的证明答案。若没有在本地运行时间证明，那么需要通过网络将证明请求发送至可以计算证明的节点，
     在节点获得答案后会将其发回到本地。我们鼓励节点在本地运行时间证明，这样对于矿工本身和整个网络来说都是有益的。
 \end{flushleft}
 \subsection{挖矿程序``btchd-miner''}
 \begin{flushleft}
-    挖矿程序的参数由``主命令''和``命令参数''两部分组成。``主命令''指明当前要做的工作类型，``命令参数''将补全当前操作相关的参数。
+    挖矿程序的参数由``主命令''和``命令参数''两部分组成。``主命令''指明当前要做的工作类型，``命令参数''将补全当前操作相关的
+    参数。
 \end{flushleft}
 \subsubsection{命令列表}
 \begin{flushleft}
@@ -184,15 +316,18 @@
     \item ``bind''绑定FarmerId
     \item ``deposit''质押金额
     \item ``withdraw''取出之前质押的金额
+    \item ``retarget''将绑定重新指向另一个账号
 \end{itemize}
 \subsection{钱包密码}
 \begin{flushleft}
     若你的钱包设置了密码，那么在使用矿工工具前需要对钱包进行解锁，否则矿工工具在使用钱包对交易记录进行签名时会出现错误。
     我们可以使用``btchd-cli''命令进行解锁操作，参考以下示例：
 \end{flushleft}
+\scriptsize
 \begin{minted}{bash}
-    btchd-cli walletpassphrase "wallet password" 100000000
+$ btchd-cli walletpassphrase "wallet password" 100000000
 \end{minted}
+\normalsize
 \begin{flushleft}
     请将``wallet password''改成你的钱包密码，后面那个数字是解锁状态保持多少秒，
     设置一个较长的数值可以让你的钱包在一段时间内都处于可用的状态。
@@ -204,7 +339,7 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner bind
+$ btchd-miner bind
 \end{minted}
 \normalsize
 \begin{itemize}
@@ -216,7 +351,7 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner bind --check
+$ btchd-miner bind --check
 
   --> txid: b6037724221c1a21b183596f25cfcf46da90ce87c67f4fb93d74dce5dd977463
     height: 200003
@@ -227,8 +362,8 @@
 \end{minted}
 \normalsize
 \begin{flushleft}
-    查询出来的绑定交易信息包括：交易哈希``txid''，高度``height''，绑定出块地址``address''及chia的``farmer''公钥。另外还包括
-    有效性标志``valid''，是否激活``active''。
+    查询出来的绑定交易信息包括：交易哈希``txid''，高度``height''，绑定出块地址``address''及chia的``farmer''公钥。另外还包
+    括有效性标志``valid''，是否激活``active''。
 \end{flushleft}
 \section{质押BHD}
 \begin{flushleft}
@@ -236,13 +371,14 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner deposit --amount 质押数量 --term [noterm, term1, term2, term3]
+$ btchd-miner deposit --amount 质押数量 --term [noterm, term1, term2, term3]
 \end{minted}
 \normalsize
 \begin{itemize}
     \item 其中``deposit''为主命令
     \item ``\mintinline{bash}{--amount}''参数，用于指定总共质押的货币数量
-    \item ``\mintinline{bash}{--term}''参数，用于指定锁定的期限。其中：``noterm''为活期， ``term1'', ``term2'', ``term3''分别为不同的锁定期限类型
+    \item ``\mintinline{bash}{--term}''参数，用于指定锁定的期限。其中：``noterm''为活期， ``term1'', ``term2'', ``term3''
+        分别为不同的锁定期限类型
 \end{itemize}
 \begin{flushleft}
     在质押成功后，``btchd-miner''会显示出一个哈希值，这个哈希值是本次交易的``交易哈希''，请保存下来，未来需要退出质押或者
@@ -254,7 +390,7 @@
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner retarget --txid 交易哈希 --address 地址
+$ btchd-miner retarget --txid 交易哈希 --address 地址
 \end{minted}
 \normalsize
 \begin{itemize}
@@ -269,13 +405,13 @@
 \end{flushleft}
 \section{查询质押}
 \begin{flushleft}
-    你可以通过使用``\mintinline{bash}{deposit --check}''命令来查询与当前账号相关的质押，通过这个命令你可以了解到相关的txid并将其用在质押命令上。
-    在命令行中显示的内容是一个json的文本，如下方的示例显示，可以看到质押的交易哈希，金额，区块高度，类型等信息。
+    你可以通过使用``\mintinline{bash}{deposit --check}''命令来查询与当前账号相关的质押，通过这个命令你可以了解到相关的
+    txid并将其用在质押命令上。在命令行中显示的内容是一个json的文本，如下方的示例显示，可以看到质押的交易哈希，金额，区块
+    高度，类型等信息。
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-
-btchd-miner deposit --check --valid
+$ btchd-miner deposit --check --valid
 
 200381 [   point  ] 0b2292e644a34b0793dd5ad1ef34ea2f7fc9fa3e19823b5d810bc8c8d46e7373
 --> 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ      12,345 BHD [  term1 ]
@@ -284,18 +420,20 @@ btchd-miner deposit --check --valid
   --   [   point  ] e2e2aa173b5502b63d1c886468b5dd2d96c4018a21b7db7ea26f7169f635320e
 --> 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ      32,323 BHD [  term3 ]
 2,585 BHD (actual)     32,323 BHD (withdraw)
-
 \end{minted}
 \normalsize
 \begin{flushleft}
-    以上是一台测试机上关于质押的查询结果，一共查询出两条质押记录。其中，第一条记录被打包到链上，区块高度为200381，已经起效，第二条记录因为已经被取出，所以已经失效。以下为各栏目的说明：
+    以上是一台测试机上关于质押的查询结果，一共查询出两条质押记录。其中，第一条记录被打包到链上，区块高度为200381，
+    已经起效，第二条记录因为已经被取出，所以已经失效。以下为各栏目的说明：
 \end{flushleft}
 \begin{itemize}
-    \item 区块高度，这条质押交易被打包在哪个区块里，若区块高度显示为\mintinline{bash}{---}则说明该交易没有被打包到区块中，或其已经失效；注：质押交易需要被打包到区块中才能起效；
+    \item 区块高度，这条质押交易被打包在哪个区块里，若区块高度显示为\mintinline{bash}{---}则说明该交易没有被打包到区块中，
+        或其已经失效；注：质押交易需要被打包到区块中才能起效；
     \item 质押类型，point表示为未被转移的质押，retarget表示质押被转移过一次或多次；
     \item 交易哈希，这次交易的哈希值，全网唯一。可以复制该哈希值用于质押转移；
     \item 矿工地址，享有该质押的出块地址。注意，该地址与质押者可以是不同的地址，在质押时可以指定该质押地址；
-    \item 质押金额及类型，这笔质押总共的质押量及质押的锁定类型，分别为：noterm-无，term1-锁定类型1，term2-锁定类型2，term3-锁定类型3。具体的锁定类型对应的期限可以查询白皮书或相关文档，正式网络和测试网络期限不同；
+    \item 质押金额及类型，这笔质押总共的质押量及质押的锁定类型，分别为：noterm-无，term1-锁定类型1，term2-锁定类型2，
+        term3-锁定类型3。具体的锁定类型对应的期限可以查询白皮书或相关文档，正式网络和测试网络期限不同；
     \item actual - 根据锁定的类型，该笔质押在当前的网络上实际的质押金额；
     \item withdraw - 若现在取出该笔质押，实际获得的BHD数额，其它的数额将会在链上被销毁；
 \end{itemize}
@@ -305,7 +443,7 @@ btchd-miner deposit --check --valid
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner withdraw --txid 交易哈希
+$ btchd-miner withdraw --txid 交易哈希
 \end{minted}
 \normalsize
 \begin{itemize}
@@ -321,12 +459,13 @@ btchd-miner deposit --check --valid
 \section{启动挖矿}
 \subsection{启动节点程序}
 \begin{flushleft}
-    节点程序是整个BitcoinHD的核心，它用于区块的下载，校验以及产生。它同时也管理着本地钱包、私钥，对区块进行签名，维护P2P网络等重要的工作。
-    若要处理网络事务，包含区块下载、校验和挖矿等，该节点程序需要一直保持运行状态。要启动节点程序，请使用下方的命令。
+    节点程序是整个BitcoinHD的核心，它用于区块的下载，校验以及产生。它同时也管理着本地钱包、私钥，对区块进行签名，维护P2P
+    网络等重要的工作。若要处理网络事务，包含区块下载、校验和挖矿等，该节点程序需要一直保持运行状态。要启动节点程序，请
+    使用下方的命令。
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchdd -testnet -server
+$ btchdd -testnet -server
 \end{minted}
 \normalsize
 \begin{itemize}
@@ -339,7 +478,7 @@ btchd-miner deposit --check --valid
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-    btchd-miner mining
+$ btchd-miner mining
 \end{minted}
 \normalsize
 \begin{itemize}
