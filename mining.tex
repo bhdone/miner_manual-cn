@@ -11,6 +11,27 @@
 \begin{flushleft}
     双击下载好的安装包来安装钱包程序，当钱包程序安装完成后，将可以在开始菜单中找到与BitcoinHD相关的文件夹和程序图标。并且，在你打开了命令提示符的程序后，可以直接输入btchd-miner等相关的命令来执行一些操作。
 \end{flushleft}
+\subsection{添加搜索路径}
+\begin{flushleft}
+    安装完成后，你需要将BitcoinHD的daemon文件夹添加到系统的路径搜索列表里，具体操作如下：
+\end{flushleft}
+\begin{enumerate}
+    \item 将BitcoinHD的安装目录的子目录``daemon''在资源管理器中复制下来，通常为``C:\symbol{92}Program Files\symbol{92}BitcoinHD\symbol{92}daemon''；
+    \item 依次打开：Windows开始菜单-设置-系统-关于-高级系统设置-环境变量；
+    \item 在打开的窗口里有两个列表，在上方的第一个列表中找到``path''项目，双击它打开路径编辑窗口；
+    \item 点击``新建''按钮，将复制好的目录粘贴到列表中，然后点击确定保存；
+    \item 重新打开你的命令行窗口，这时输入``btchd-miner.exe --help''后应该可以看到命令被正确调用；
+\end{enumerate}
+\subsection{配置节点RPC服务}
+\begin{flushleft}
+    默认的情况下，如果你使用GUI版本的钱包，它是不能直接与挖矿程序进行通讯的。如果你需要使用GUI版本的钱包来挖矿，则需要修改其配置：
+\end{flushleft}
+\begin{enumerate}
+    \item 打开钱包，注：若是使用测试网络，请双击绿色的那个图标；
+    \item 依次打开：设置-选项-配置文件，并且在弹出的提示框中点击``确定''；
+    \item 在打开的文本编辑器中输入``server=1''，然后保存；
+    \item 关闭钱包并重启，此时挖矿程序将可以正确连接；
+\end{enumerate}
 \section{编写配置文件}
 \begin{flushleft}
     在开始挖矿工作前，需要先编写一个简单的配置文件，用于指定一些与挖矿工作相关的基本信息。
