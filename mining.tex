@@ -90,7 +90,7 @@ $ sudo cp btchd/* /usr/local/bin/
 \subsubsection{测试电脑的vdf计算速度}
 \begin{flushleft}
     若你自行编译了工程chiavdf，那么可以在chiavdf/src目录下找到一个名为vdf\_bench的可执行文件，运行该文件可以获得当前电脑
-    vdf运算的速度，使用命令``\mintinline{bash}{vdf_bench square_asm 50000}''，该命令会让vdf\_bench执行指定数量的计算，
+    vdf运算的速度，使用命令``\mintinline{bash}{vdf_bench square_asm 250000}''，该命令会让vdf\_bench执行指定数量的计算，
     然后获得每秒的vdf计算量并显示出来。例如，我在一台MacbookPro A1707上运行得到的结果是每秒150k ips左右，而在一台将近10年
     的老式PC上计算的结果是130k ips左右，而在一台安装了i5 10600kf的电脑上得到的结果是每秒200k ips左右。
 \end{flushleft}
@@ -190,15 +190,24 @@ Usage:
     ``\mintinline{bash}{-rpcpassword=world}''，这样就设置了RPC服务的登录用户名和密码。
 \end{flushleft}
 \begin{flushleft}
-    然后，在命令行窗口中输入下方命令启动Docker镜像中的timelord，注意要将与用户名和密码相关的参数修改成你之前设置的值。
+    然后，在命令行窗口中输入下方命令启动Docker镜像中的timelord，注意要将与用户名和密码相关的参数修改成你之前设置的值。以下命令会在本地打开19191
+    端口，以供本地的miner程序连接，如果需要侦听0.0.0.0请修改对应的参数即可。关于Docker的参数使用说明可以在(https://docker.io)上自行查阅，
+    这里就不再赘述。
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-$ docker run --add-host host.docker.internal:host-gateway -it timelord
-    /timelord --rpc=http://host.docker.internal:18732
-    --rpc-user=hello --rpc-password=world --vdf_client-path=/vdf_client
+$ docker run --add-host host.docker.internal:host-gateway -p 127.0.0.1:19191:19191
+    -it timelord /timelord --rpc=http://host.docker.internal:18732
+    --rpc-user=hello --rpc-password=world
+    --vdf_client-path=/vdf_client
+    --bind=0.0.0.0 --port=19191
 \end{minted}
 \normalsize
+\subsubsection{连接至Docker版本的Timelord}
+\begin{flushleft}
+    按照上方的Timelord启动命令，Timelord已经侦听了19191端口，那么使用Miner连接至Timelord可以使用命令\scriptsize
+    ``\mintinline{bash}{$ miner --timelord --timelord-host=127.0.0.1 --timeload-port=19191}''\normalsize
+\end{flushleft}
 \subsubsection{连接至公共的Timelord}
 \begin{flushleft}
     连接至公共的Timelord，可以直接在miner的参数添加公共的timelord的地址和端口即可，假设有一台timelord服务器的hostname为：
@@ -206,8 +215,7 @@ $ docker run --add-host host.docker.internal:host-gateway -it timelord
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-$ btchd-miner mining --timelord --timelord-host=timelord.bhd.one
-    --timelord-port=19191
+$ btchd-miner mining --timelord --timelord-host=timelord.bhd.one --timelord-port=19191
 \end{minted}
 \normalsize
 \subsubsection{速度测试}
@@ -216,7 +224,7 @@ $ btchd-miner mining --timelord --timelord-host=timelord.bhd.one
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
-$ docker run -it timelord /vdf_bench square_asm 50000
+$ docker run -it timelord /vdf_bench square_asm 250000
 \end{minted}
 \normalsize
 \begin{flushleft}
@@ -424,11 +432,9 @@ $ btchd-miner retarget --txid 交易哈希 --address 地址
 \scriptsize
 \begin{minted}{bash}
 $ btchd-miner deposit --check --valid
-
 200381 [   point  ] 0b2292e644a34b0793dd5ad1ef34ea2f7fc9fa3e19823b5d810bc8c8d46e7373
 --> 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ      12,345 BHD [  term1 ]
 2,469 BHD (actual)        111 BHD (withdraw)
-
   --   [   point  ] e2e2aa173b5502b63d1c886468b5dd2d96c4018a21b7db7ea26f7169f635320e
 --> 2NGWAccrksGM4TmefLN4qyW1kV7VpMngtBQ      32,323 BHD [  term3 ]
 2,585 BHD (actual)     32,323 BHD (withdraw)
