@@ -1,6 +1,7 @@
 svg-inkscape
+.DS_Store
 .vscode
-_minted-bhd-how_to_do_mining
+_minted-miner_manual-cn
 *.pdf
 *.aux
 *.log

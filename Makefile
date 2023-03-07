@@ -1,4 +1,4 @@
-MAINNAME=bhd-how_to_do_mining
+MAINNAME=miner_manual-cn
 TEX_FILES=$(wildcard *.tex)
 
 GENERATOR_FILES=$(wildcard utils/*.js)
