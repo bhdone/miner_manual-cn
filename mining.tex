@@ -15,21 +15,21 @@
     你也可以运行控制台版本的节点钱包程序。在命令行执行``\mintinline{bash}{btchdd -testnet -server}''来启动控制台节点钱包。
     参数``\mintinline{bash}{-testnet}''表明启动该节点并连接至测试网络。
 \end{flushleft}
-\subsection{Linux}
+\subsection{Linux/Unix}
 \begin{flushleft}
     若你使用的操作系统是Linux，请在官方网站下载对应的安装包。使用tar命令将下载包里的文件解出，然后将其中所有的文件拷贝至
     ``/usr/local/bin''目录中。Linux压缩包中同时包含控制台版本和图形界面版本的节点钱包，运行方式和Windows下一致。
 \end{flushleft}
 \subsection{macOS}
 \begin{flushleft}
-    macOS的安装包是扩展名为.dmg的文件，在macOS中双击该文件并且将里面的BitcoinHD图标拖动到Application文件夹中完成安装。剩下
-    的工作和Windows/Linux一致，你需要找到带绿色图标的节点钱包并运行，或者使用控制台版本的节点钱包，同Windows。
+    macOS的安装包是扩展名为.dmg的文件，在macOS中双击该文件并且将里面的BitcoinHD图标拖动到Application文件夹中完成安装。剩
+    下的工作和Windows/Linux一致，你需要找到带绿色图标的节点钱包并运行，或者使用控制台版本的节点钱包，同Windows。
 \end{flushleft}
 \section{安装 - Windows篇}
 \begin{flushleft}
     双击下载好的安装包来安装钱包程序，当钱包程序安装完成后，将可以在开始菜单中找到与BitcoinHD相关的文件夹和程序图标。并且，
     在你打开了命令提示符的程序后，可以直接输入btchd-miner等相关的命令来执行操作。
-\end{flushleft}
+\choco install crystaldiskinfoend{flushleft}
 \subsection{添加搜索路径}
 \begin{flushleft}
     安装完成后，你需要将BitcoinHD的daemon文件夹添加到系统的路径搜索列表里，具体操作如下：
@@ -190,9 +190,9 @@ Usage:
     ``\mintinline{bash}{-rpcpassword=world}''，这样就设置了RPC服务的登录用户名和密码。
 \end{flushleft}
 \begin{flushleft}
-    然后，在命令行窗口中输入下方命令启动Docker镜像中的timelord，注意要将与用户名和密码相关的参数修改成你之前设置的值。以下命令会在本地打开19191
-    端口，以供本地的miner程序连接，如果需要侦听0.0.0.0请修改对应的参数即可。关于Docker的参数使用说明可以在(https://docker.io)上自行查阅，
-    这里就不再赘述。
+    然后，在命令行窗口中输入下方命令启动Docker镜像中的timelord，注意要将与用户名和密码相关的参数修改成你之前设置的值。以
+    下命令会在本地打开19191端口，以供本地的miner程序连接，如果需要侦听0.0.0.0请修改对应的参数即可。关于Docker的参数使用
+    说明可以在(https://docker.io)上自行查阅，这里就不再赘述。
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
@@ -203,6 +203,10 @@ $ docker run --add-host host.docker.internal:host-gateway -p 127.0.0.1:19191:191
     --bind=0.0.0.0 --port=19191
 \end{minted}
 \normalsize
+\begin{flushleft}
+    注意：在上述的命令中启动的timelord将侦听本机的127.0.0.1地址，若你的miner程序在其它的机器上需要连接到这台timelord，则
+    需要将上述命令中，第一行的``127.0.0.1''改为``0.0.0.0''。
+\end{flushleft}
 \subsubsection{连接至Docker版本的Timelord}
 \begin{flushleft}
     按照上方的Timelord启动命令，Timelord已经侦听了19191端口，那么使用Miner连接至Timelord可以使用命令\scriptsize
@@ -355,6 +359,12 @@ $ btchd-cli walletpassphrase "wallet password" 100000000
 \end{flushleft}
 \section{绑定FarmerId}
 \begin{flushleft}
+    绑定FarmerId与矿工的出块地址，将会允许矿工使用该地址进行挖矿，与该FarmerId的相关签名，在每一个区块中都需要被验证，以维
+    护网络安全，防止区块被伪造。每一次绑定除了手续费以外，还需要额外的$0.1_{BHD}$，该金额被质押到链上，在解绑的时候原路退
+    回到绑定的账号中。
+\end{flushleft}
+\subsection{绑定命令}
+\begin{flushleft}
     在挖矿开始前，你需要把你的BHD接收奖励的地址和FarmerId绑定，因为需要做签名，所以你需要先编写正确的配置文件并将你正确的
     ``Seed''和BHD奖励地址填入，然后使用下方的命令来进行绑定。
 \end{flushleft}
@@ -366,7 +376,7 @@ $ btchd-miner bind
 \begin{itemize}
     \item ``bind''为主命令
 \end{itemize}
-\section{查询绑定}
+\subsection{查询绑定}
 \begin{flushleft}
     当绑定完成后，可以通过``\mintinline{bash}{bind --check}''来查询绑定记录。
 \end{flushleft}
@@ -385,10 +395,17 @@ $ btchd-miner bind --check
     查询出来的绑定交易信息包括：交易哈希``txid''，高度``height''，绑定出块地址``address''及chia的``farmer''公钥。另外还包
     括有效性标志``valid''，是否激活``active''。
 \end{flushleft}
+\subsection{解除绑定}
+\begin{flushleft}
+    解除绑定可以将绑定在在链上的记录解绑并且取回绑定所需要的$0.1_{BHD}$到原账户，解除绑定使用命令
+    ``\mintinline{bash}{btchd-cli unbindplotter 交易哈希}''。解除绑定后，该地址将不再能进行挖矿，之前绑定过的FarmerId也无
+    法用于签名认证。若要使用该地址和FarmerId进行挖矿，需要重新执行绑定操作。
+\end{flushleft}
 \section{质押BHD}
 \begin{flushleft}
-    将BHD质押到网络上，以获取区块的完整收益，你可以选择不质押，当你质押的额度不足时，你将无法获得全部区块奖励。按照白皮书
-    定义，若不质押或质押的额度不足，矿工将只能获得区块奖励的$15\%$。
+    将BHD质押到网络上，以获取区块的完整收益，你可以选择不质押。但是，当你无质押或者质押的额度不足时，你将无法获得全部区块
+    奖励。按照白皮书定义，若不质押或质押的额度不足，矿工将只能获得区块奖励的$15\%$，剩下的$85\%$将会累积到链上，直到下一个
+    质押满额度的矿工出块时将这些累积的金额一次性领取。
 \end{flushleft}
 \subsection{质押额度}
 \begin{flushleft}
@@ -404,7 +421,7 @@ $ btchd-miner bind --check
     Alice的算力占比就是$\frac{100}{2016}$。计算得出了算力占比后，再拿该值乘以已经发行的货币总量就可以得出矿工Alice所需要质
     押的货币总额。
 \end{flushleft}
-\subsection{查询质押额度}
+\section{查询质押额度}
 \begin{flushleft}
     BitcoinHD已经在挖矿程序中提供了质押额度查询命令，先确保你的挖矿程序已经配置完成，然后用以下的命令来进行查询。
 \end{flushleft}
@@ -445,7 +462,7 @@ $ btchd-miner deposit --amount 质押数量 --term [noterm, term1, term2, term3]
     在质押成功后，``btchd-miner''会显示出一个哈希值，这个哈希值是本次交易的``交易哈希''，请保存下来，未来需要退出质押或者
     重新绑定质押地址的时候使用。
 \end{flushleft}
-\section{质押转移}
+\subsection{质押转移}
 \begin{flushleft}
     质押在链上的BHD将无法在约定的时间内被全额取出，但是可以将其转移给其它的矿工地址。
 \end{flushleft}
@@ -464,7 +481,7 @@ $ btchd-miner retarget --txid 交易哈希 --address 地址
     一个既定值。在testnet3测试网上，该数值为10，在正式网络上为7个星期左右。一笔已经重新绑定过的质押可以被再次重绑，
     命令格式与上方描述相同，需要指定上一次重绑的交易哈希。另外，只有该质押的拥有者才可以转移该质押。
 \end{flushleft}
-\section{查询质押}
+\subsection{查询质押}
 \begin{flushleft}
     你可以通过使用``\mintinline{bash}{deposit --check}''命令来查询与当前账号相关的质押，通过这个命令你可以了解到相关的
     txid并将其用在质押命令上。在命令行中显示的内容是一个json的文本，如下方的示例显示，可以看到质押的交易哈希，金额，区块
@@ -496,7 +513,7 @@ $ btchd-miner deposit --check --valid
     \item actual - 根据锁定的类型，该笔质押在当前的网络上实际的质押金额；
     \item withdraw - 若现在取出该笔质押，实际获得的BHD数额，其它的数额将会在链上被销毁；
 \end{itemize}
-\section{退出质押}
+\subsection{退出质押}
 \begin{flushleft}
     当质押的金额的锁定期限到达后，矿工们可以将质押的金额取出。使用下方的命令。
 \end{flushleft}
@@ -507,7 +524,8 @@ $ btchd-miner withdraw --txid 交易哈希
 \normalsize
 \begin{itemize}
     \item 其中``withdraw''为主命令
-    \item ``\mintinline{bash}{--txid}''参数，指定``交易哈希''，这个``交易哈希''在之前使用``deposit''命令成功后会被显示出来。
+    \item ``\mintinline{bash}{--txid}''参数，指定``交易哈希''，这个``交易哈希''在之前使用``deposit''命令成功后会被显示出
+        来。
 \end{itemize}
 \subsection{提早退出}
 \begin{flushleft}
@@ -515,12 +533,13 @@ $ btchd-miner withdraw --txid 交易哈希
     并且同时影响矿工所需要的质押货币量。例如：假设你质押了一笔为期3年的$1000_{BHD}$，但是在质押时间刚到一年的时候，
     你将这笔质押的金额取出，该质押将只有$333_{BHD}$被取出，而其余的$667_{BHD}$将在链上被直接销毁。
 \end{flushleft}
-\section{启动挖矿}
-\subsection{启动节点程序}
+\section{挖矿}
+\subsection{节点钱包}
 \begin{flushleft}
-    节点程序是整个BitcoinHD的核心，它用于区块的下载，校验以及产生。它同时也管理着本地钱包、私钥，对区块进行签名，维护P2P
-    网络等重要的工作。若要处理网络事务，包含区块下载、校验和挖矿等，该节点程序需要一直保持运行状态。要启动节点程序，请
-    使用下方的命令。
+    节点钱包程序是整个BitcoinHD的核心，程序名称为``btchdd''。启动它后，会自动接入P2P网络，然后根据共识协议从P2P网络中下载
+    区块数据，并且对下载到的区块数据进行校验，以确定该区块符合共识协议中约定的条款。同时，节点钱包还管理着BitcoinHD账户的
+    私钥，并且可以使用私钥对产生的交易进行签名等操作。该节点钱包需要保持运行状态才能使挖矿工作顺利进行，所以，要启动节点
+    钱包，请使用下方的命令：
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
@@ -531,7 +550,13 @@ $ btchdd -testnet -server
     \item ``\mintinline{bash}{-testnet}''参数，表示启动测试网络的节点程序，若没有该参数则启动正式网络的节点程序
     \item ``\mintinline{bash}{-server}''参数，打开RPC服务器，用于稍后与挖矿程序进行通信
 \end{itemize}
-\subsection{启动挖矿程序}
+\subsection{恢复钱包}
+\begin{flushleft}
+    若你是第一次启动该程序，它会在数据目录下自动产生新的钱包账户并保存至钱包文件``wallet.dat''中。你可以在相关的目录下找到
+    这个钱包文件并且对其进行备份。若你需要导入之前的钱包，则在钱包节点退出的情况下将你原来的``wallet.dat''覆盖回数据目录
+    下的同名文件，再次启动钱包将会发现，节点钱包显示了你原来的钱包信息。
+\end{flushleft}
+\subsection{开始挖矿}
 \begin{flushleft}
     当一切都准备就绪后，包括节点已经将所有的区块都同步完成，则可以启动挖矿程序。使用下方的命令来启动。
 \end{flushleft}
