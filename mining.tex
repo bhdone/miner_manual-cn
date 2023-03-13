@@ -387,7 +387,48 @@ $ btchd-miner bind --check
 \end{flushleft}
 \section{质押BHD}
 \begin{flushleft}
-    将BHD质押到网络上，以获取区块的完整收益，使用下面的命令来进行质押。
+    将BHD质押到网络上，以获取区块的完整收益，你可以选择不质押，当你质押的额度不足时，你将无法获得全部区块奖励。按照白皮书
+    定义，若不质押或质押的额度不足，矿工将只能获得区块奖励的$15\%$。
+\end{flushleft}
+\subsection{质押额度}
+\begin{flushleft}
+    一个矿工需要质押多少额度的货币以获得全部区块奖励呢？由白皮书中的计算可以得知，质押的数量与其算力相关，具体的公式如下：
+\end{flushleft}
+\begin{equation}
+    Pledge_{BHD}=\frac{Netspace_{Miner}}{Netspace_{Network}}*Total_{BHD}
+\end{equation}
+\begin{flushleft}
+    简单的解读就是：该矿工需要质押的货币额度$Pledge_{BHD}$是其算力占比乘以到当前高度为止已经发行的货币数量$Total_{BHD}$。
+    在BitcoinHD官方的代码中，使用了简单的方式来获得该矿工的算力占比，即：在最近的2016个区块中，有多少个区块是由该矿工生成
+    的，那么该矿工算力占比就简化为，出块数量除以2016。例如：在最近的2016个区块中，有100个区块由矿工Alice生成，所以矿工
+    Alice的算力占比就是$\frac{100}{2016}$。计算得出了算力占比后，再拿该值乘以已经发行的货币总量就可以得出矿工Alice所需要质
+    押的货币总额。
+\end{flushleft}
+\subsection{查询质押额度}
+\begin{flushleft}
+    BitcoinHD已经在挖矿程序中提供了质押额度查询命令，先确保你的挖矿程序已经配置完成，然后用以下的命令来进行查询。
+\end{flushleft}
+\scriptsize
+\begin{minted}{bash}
+$ btchd-miner mining-req
+2023-03-13 16:43:13.455 INFO  [19327] [main@570] network: testnet
+2023-03-13 16:43:13.455 INFO  [19327] [tools::CreateRPCClient@50] Creating RPC client by using cookie file:
+       mined:         10/2016 BLK
+    supplied:      15,229,485 BHD
+      burned:             670 BHD
+  accumulate:         275,476 BHD
+     require:          75,534 BHD
+\end{minted}
+\normalsize
+\begin{flushleft}
+    由以上的例子可以看出，当前的矿工在最后的2016个区块中总共产生了10个区块，所以其出块占比为$\frac{10}{2016}$，当前的总货币
+    发行量为$15,229,485_{BHD}$，已经销毁$670_{BHD}$，实际总流通量为$15,228,815_{BHD}$，所以按照当前的算力占比计算得出总共需
+    要质押的货币总量为$75,534_{BHD}$。另外，``accumulate''指的是因之前的矿工不足额质押而累积在链上的额度，总共
+    $275,476_{BHD}$，这些额度将由下一个出块的全额质押的矿工一次性领完。
+\end{flushleft}
+\subsection{质押命令}
+\begin{flushleft}
+    下面的命令将指定额度的BHD质押到链上。
 \end{flushleft}
 \scriptsize
 \begin{minted}{bash}
