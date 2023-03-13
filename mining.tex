@@ -29,7 +29,7 @@
 \begin{flushleft}
     双击下载好的安装包来安装钱包程序，当钱包程序安装完成后，将可以在开始菜单中找到与BitcoinHD相关的文件夹和程序图标。并且，
     在你打开了命令提示符的程序后，可以直接输入btchd-miner等相关的命令来执行操作。
-\choco install crystaldiskinfoend{flushleft}
+\end{flushleft}
 \subsection{添加搜索路径}
 \begin{flushleft}
     安装完成后，你需要将BitcoinHD的daemon文件夹添加到系统的路径搜索列表里，具体操作如下：
@@ -312,14 +312,40 @@ $ btchd-miner generate-config
     登录方式的情况下不需要指定。
 \end{flushleft}
 \section{基本参数介绍}
-\subsection{节点程序``btchdd''}
+\subsection{节点钱包``btchdd''}
 \subsubsection{参数}
 \begin{itemize}
     \item ``-testnet''参数，启动测试网络的节点程序，若不带该参数则表示启动正式网络的节点程序
     \item ``-server''参数，启动RPC服务器，用以接收其它客户端，包括挖矿客户端的连接和命令
-    \item ``-timelord''参数，启动时间证明
+    \item ``-rpcport''参数，用于指定RPC运行的端口号，默认的端口号是18732(testnet3)，8732(mainnet)，如果你有需求可以在这里
+        指定该号码
+    \item ``-rpcuser''参数，用于指定登录到RPC服务的名称
+    \item ``-rpcpassword''参数，用于指定登录到RPC服务的密码
+    \item ``-rpcbind''参数，用于指定RPC服务侦听的地址及端口号，默认值为``127.0.0.1:18732''(testnet3)，若你需要远程连接到该
+        RPC服务，则需要使用该参数设置绑定地址为``0.0.0.0:18732''，若不需要则不需要带入该参数
+    \item ``-rpcallowip''参数，用于指定允许访问的地址段，比如，使用``172.16.0.0/24''表示所有的主机地址满足``172.16.0.*''都
+        可以允许连接到该RPC服务。注意，该参数可以重复使用以指明不同的地址段
+    \item ``-timelord''参数，启动时间证明，同时接收全网的VDF请求并将结果返回
     \item ``-timelord-vdf\_client''参数，当指明了``-timelord''参数时，需要同时添加本参数来指定``vdf\_client''的路径
 \end{itemize}
+\subsubsection{什么是``.cookie''}
+\begin{flushleft}
+    BitcoinHD继续延用了Bitcoin的RPC服务代码，所以与RPC服务相关的参数设置与Bitcoin也是基本一至的。如果只使用一台电脑进行挖
+    矿，那么可以全部都使用默认的参数，只在btchd.conf中简单添加``server=1''即可。BitcoinHD的节点钱包在启动的时候会自动生成
+    一对用户名称和密码并存储在``.cookie''文件里供本机的程序(例如：btchd-cli或btchd-miner)登录时读取并使用其指定的用户名和
+    密码进行连接。所以，当你要求节点钱包使用非默认的目录来存储你的数据，那么在使用``btchd-miner''时需要使用
+    ``\mintinline{bash}{--cookie}''来指定``.cookie''文件所在的路径，而在使用``btchd-cli''时需要使用
+    ``\mintinline{bash}{--rpccookiefile}''来指定该文件所在的路径，否则这两个客户端在连接RPC服务时将会不知道使用什么来进行
+    身份验证，从而RPC服务将拒绝客户端的连接。
+\end{flushleft}
+\subsubsection{自定义网络}
+\begin{flushleft}
+    当你需要更精细的网络设置来应对当前更加复杂的网络情况时，你就有可能需要绑定侦听的地址及设置用户名称和密码，用于让其它的
+    客户端程序可能通过远程连接到RPC服务。参考上方的参数介绍来了解这些参数的详细用法，值得注意的是，当你使用``-rpcbind''来
+    绑定侦听地址试图让节点钱包接受远程连接后，一定要使用参数``-rpcallowip''来指定允许登入的IP地址范围，否则RPC服务将会拒绝
+    所有的连接。同时，你将必需在节点钱包启动的时候指定登录的用户名称和密码，否则，远程的主机也将无法连接。
+\end{flushleft}
+\subsubsection{与timelord相关}
 \begin{flushleft}
     注：与timelord相关的参数只能在Linux下运行，同时你需要编译chiavdf项目。``timelord''相关的参数，用于在本地计算并获取
     时间证明。关于时间证明的相关信息，可以参考BHD新版本的白皮书中与VDF相关的章节。另外，因为VDF计算暂时还没有Windows版本，
