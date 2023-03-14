@@ -84,7 +84,7 @@ $ sudo cp btchd/* /usr/local/bin/
 \end{flushleft}
 \subsubsection{时间证明运算器运行条件}
 \begin{itemize}
-    \item 操作系统需要Linux或macOS；
+    \item 操作系统需要Linux或macOS，若使用Windows则只能将Timelord运行在WSL或Docker中，会有大概$10\%$性能损失；
     \item 机器中有一块较好的cpu，若cpu主频太差，那么时间证明的结果获取太慢，也没有意义；
 \end{itemize}
 \subsubsection{测试电脑的vdf计算速度}
@@ -100,20 +100,21 @@ $ sudo cp btchd/* /usr/local/bin/
     好的版本。该项目的源代码的github地址为：``https://github.com/chia-network/chiavdf''。该项目将会通过编译生成一个名为
     ``vdf\_client''的文件，该文件就是时间证明运算器，是一个可执行程序，后续启动节点时需要指定该文件的完整路径。
 \end{flushleft}
-\subsection{启动节点并运行时间证明运算器}
+\subsection{启动节点}
 \begin{flushleft}
-    若不打算在本地运行时间证明运算器，则在启动钱包节点时只需要带上``\mintinline{bash}{btchdd -server}''即可（若是测试网络
+    若不打算让本地的节点钱包连接到，则在启动钱包节点时只需要带上``\mintinline{bash}{btchdd -server}''即可（若是测试网络
     则需要加上``\mintinline{bash}{-testnet}''）。若打算运行时间证明运算器，那么请同时添加
-    ``\mintinline{bash}{-timelord -timelord-vdf_client}=[the full path to vdf\_client binary]''。
+    ``\mintinline{bash}{-timelord -timelord-hosts}=[timelord endpoints separated with ',']''。
 \end{flushleft}
 \begin{itemize}
     \item \mintinline{bash}{-timelord}，该参数表示启动时间证明运算器；
-    \item \mintinline{bash}{-timelord-vdf_client}，该参数指明运算器的完整路径；
+    \item \mintinline{bash}{-timelord-hosts}，该参数指明timelord的连接点，包括域名(或ip地址):端口，可以同时指定多个Timelord
+        服务，使用逗号将其分隔开来即可。例如：``\mintinline{bash}{-timelord-hosts=127.0.0.1:19191,timelord.bhd.one:19191}''；
 \end{itemize}
-\subsection{使用Timelord}
+\subsection{Miner使用Timelord}
 \begin{flushleft}
-    Timelord是一个桥梁程序，用于执行vdf\_client并获得计算结果并返回给Miner，它与节点钱包启动时通过过自带timelord参数来
-    获取计算结果相比，有以下几个优点：
+    Timelord是一个桥梁程序，用于执行vdf\_client并获得计算结果并返回给请求端，请求端可以是节点钱包，也可以是挖矿的客户端，
+    直接使用miner来与Timelord相连接有以下的优点：
 \end{flushleft}
 \begin{itemize}
     \item 不依附节点钱包，直接通过socket与Miner连接，获得的结果直接返回给Miner出块打包；
@@ -315,18 +316,18 @@ $ btchd-miner generate-config
 \subsection{节点钱包``btchdd''}
 \subsubsection{参数}
 \begin{itemize}
-    \item ``-testnet''参数，启动测试网络的节点程序，若不带该参数则表示启动正式网络的节点程序
-    \item ``-server''参数，启动RPC服务器，用以接收其它客户端，包括挖矿客户端的连接和命令
+    \item ``-testnet''参数，启动测试网络的节点程序，若不带该参数则表示启动正式网络的节点程序；
+    \item ``-server''参数，启动RPC服务器，用以接收其它客户端，包括挖矿客户端的连接和命令；
     \item ``-rpcport''参数，用于指定RPC运行的端口号，默认的端口号是18732(testnet3)，8732(mainnet)，如果你有需求可以在这里
-        指定该号码
-    \item ``-rpcuser''参数，用于指定登录到RPC服务的名称
-    \item ``-rpcpassword''参数，用于指定登录到RPC服务的密码
+        指定该号码；
+    \item ``-rpcuser''参数，用于指定登录到RPC服务的名称；
+    \item ``-rpcpassword''参数，用于指定登录到RPC服务的密码；
     \item ``-rpcbind''参数，用于指定RPC服务侦听的地址及端口号，默认值为``127.0.0.1:18732''(testnet3)，若你需要远程连接到该
-        RPC服务，则需要使用该参数设置绑定地址为``0.0.0.0:18732''，若不需要则不需要带入该参数
+        RPC服务，则需要使用该参数设置绑定地址为``0.0.0.0:18732''，若不需要则不需要带入该参数；
     \item ``-rpcallowip''参数，用于指定允许访问的地址段，比如，使用``172.16.0.0/24''表示所有的主机地址满足``172.16.0.*''都
-        可以允许连接到该RPC服务。注意，该参数可以重复使用以指明不同的地址段
-    \item ``-timelord''参数，启动时间证明，同时接收全网的VDF请求并将结果返回
-    \item ``-timelord-vdf\_client''参数，当指明了``-timelord''参数时，需要同时添加本参数来指定``vdf\_client''的路径
+        可以允许连接到该RPC服务。注意，该参数可以重复使用以指明不同的地址段；
+    \item ``-timelord''参数，启动时间证明，同时接收全网的VDF请求并将结果返回；
+    \item ``-timelord-hosts''参数，当指明了``-timelord''参数时，需要同时添加本参数来指定timelord服务的连接点；
 \end{itemize}
 \subsubsection{什么是``.cookie''}
 \begin{flushleft}
@@ -363,11 +364,11 @@ $ btchd-miner generate-config
     在执行挖矿程序时，使用参数``\mintinline{bash}{--help}''将显示出帮助文档。下方是一些重要的命令：
 \end{flushleft}
 \begin{itemize}
-    \item ``mining''开始挖矿
-    \item ``bind''绑定FarmerId
-    \item ``deposit''质押金额
-    \item ``withdraw''取出之前质押的金额
-    \item ``retarget''将绑定重新指向另一个账号
+    \item ``mining''开始挖矿；
+    \item ``bind''绑定FarmerId；
+    \item ``deposit''质押金额；
+    \item ``withdraw''取出之前质押的金额；
+    \item ``retarget''将绑定重新指向另一个账号；
 \end{itemize}
 \subsection{钱包密码}
 \begin{flushleft}
@@ -400,7 +401,7 @@ $ btchd-miner bind
 \end{minted}
 \normalsize
 \begin{itemize}
-    \item ``bind''为主命令
+    \item ``bind''为主命令；
 \end{itemize}
 \subsection{查询绑定}
 \begin{flushleft}
@@ -479,10 +480,10 @@ $ btchd-miner deposit --amount 质押数量 --term [noterm, term1, term2, term3]
 \end{minted}
 \normalsize
 \begin{itemize}
-    \item 其中``deposit''为主命令
-    \item ``\mintinline{bash}{--amount}''参数，用于指定总共质押的货币数量
+    \item 其中``deposit''为主命令；
+    \item ``\mintinline{bash}{--amount}''参数，用于指定总共质押的货币数量；
     \item ``\mintinline{bash}{--term}''参数，用于指定锁定的期限。其中：``noterm''为活期， ``term1'', ``term2'', ``term3''
-        分别为不同的锁定期限类型
+        分别为不同的锁定期限类型；
 \end{itemize}
 \begin{flushleft}
     在质押成功后，``btchd-miner''会显示出一个哈希值，这个哈希值是本次交易的``交易哈希''，请保存下来，未来需要退出质押或者
@@ -498,9 +499,9 @@ $ btchd-miner retarget --txid 交易哈希 --address 地址
 \end{minted}
 \normalsize
 \begin{itemize}
-    \item 其中``retarget''为主命令
-    \item ``\mintinline{bash}{--txid}''参数，用于指定将要被重新绑定的质押交易哈希
-    \item ``\mintinline{bash}{--address}''参数，用于指定新的被绑定的地址
+    \item 其中``retarget''为主命令；
+    \item ``\mintinline{bash}{--txid}''参数，用于指定将要被重新绑定的质押交易哈希；
+    \item ``\mintinline{bash}{--address}''参数，用于指定新的被绑定的地址；
 \end{itemize}
 \begin{flushleft}
     为了防止在短时间内某笔质押被频繁重绑，绑定操作有时间间隔规定。该次绑定与质押或上次绑定之间的区块数量不得小于
@@ -549,9 +550,9 @@ $ btchd-miner withdraw --txid 交易哈希
 \end{minted}
 \normalsize
 \begin{itemize}
-    \item 其中``withdraw''为主命令
+    \item 其中``withdraw''为主命令；
     \item ``\mintinline{bash}{--txid}''参数，指定``交易哈希''，这个``交易哈希''在之前使用``deposit''命令成功后会被显示出
-        来。
+        来；
 \end{itemize}
 \subsection{提早退出}
 \begin{flushleft}
@@ -573,8 +574,8 @@ $ btchdd -testnet -server
 \end{minted}
 \normalsize
 \begin{itemize}
-    \item ``\mintinline{bash}{-testnet}''参数，表示启动测试网络的节点程序，若没有该参数则启动正式网络的节点程序
-    \item ``\mintinline{bash}{-server}''参数，打开RPC服务器，用于稍后与挖矿程序进行通信
+    \item ``\mintinline{bash}{-testnet}''参数，表示启动测试网络的节点程序，若没有该参数则启动正式网络的节点程序；
+    \item ``\mintinline{bash}{-server}''参数，打开RPC服务器，用于稍后与挖矿程序进行通信；
 \end{itemize}
 \subsection{恢复钱包}
 \begin{flushleft}
@@ -592,5 +593,5 @@ $ btchd-miner mining
 \end{minted}
 \normalsize
 \begin{itemize}
-    \item ``mining''为主命令
+    \item ``mining''为主命令；
 \end{itemize}
